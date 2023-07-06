@@ -12,7 +12,6 @@ src/assets/*
 dist
 dist-ssr
 *.local
-*.git
 
 .vscode/*
 !.vscode/extension.json
