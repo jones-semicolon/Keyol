@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Comforter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+:root {
+  font-family: 'Roboto Slab' ,Helvetica, Inter, system-ui, Avenir, Arial, sans-serif;
+  line-height: 2;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  --overlay-color: hsl(0 0% 0% / .6);
+  --background: hsl(0 0% 14%);
+  --navBg-light: hsl(0 0% 90%);
+  --navBg-dark: hsl(0 0% 12%);
+  --navBg: hsl(0 0% 12%);
+  --active: hsl(0 0% 60%)
+}
+/*@NOTE: RESET*/
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /*@NOTE:DEBUG */
+  /* outline: 1px solid; */
+}
+
+a, button {
+  all: initial;
+  color: inherit;
+  font-family: inherit;
+  height: 100%;
+  cursor: pointer;
+  user-select: none;
+  transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1)
+}
+
+button {
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+
+:root, body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  outline-color: red;
+}
+
+#root {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+li {
+  list-style-type: none;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: hsl(0 0% 50%);
+  background-image: linear-gradient(to right,hsl(0 0% 50%), hsl(0 0% 70%), hsl(0 0% 50%));
+  background-size: 300% 100%;
+  animation: bgLoading 2s infinite;
+}
+
+.ReactModal__Content{
+  opacity: 0;
+  transition: opacity 150ms cubic-bezier(0.47, 0, 0.745, 0.715);
+  /* inset: unset !important; */
+  top: 50% !important;
+  left: 50% !important;
+  width: 90vw !important;
+  /* max-height: 90vh !important; */
+  background: none !important;
+  border-color: var(--background) !important;
+}
+
+.ReactModal__Content--after-open{  
+  opacity: 1;
+}
+
+.ReactModal__Content--before-close{
+  opacity: 0;
+}
+.ReactModal__Overlay{
+  opacity: 0;
+  transition: opacity 250ms cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 99;
+  background-color: var(--overlay-color),
+}
+
+.ReactModal__Overlay--after-open{  
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+  opacity: 0;
+}
+
+@keyframes bgLoading {
+  from {
+  background-position: 0% 0%;
+}
+  to {
+  background-position: 300% 0%;
+}
+}
+
+@media (width > 460px) {
+  #root {
+    flex-direction: row;
+  }
+}
+
+@media (width > 768px){
+}
+
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+    --background: #ffffff;
+    /* --overlay-color: hsl(0 0% 98% / .6) */
+    --navBg: var(--navBg-light);
+  }
+  section.navbar {
+    color: #213547;
+  }
+}
