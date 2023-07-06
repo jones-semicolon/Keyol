@@ -26,7 +26,7 @@ class Portfolio extends Component {
     this.state = {
       photos: [],
       isLoaded: false,
-      title: "",
+      title: "" || this.props.title,
       modal: {
         state: false,
         src: "",
@@ -38,8 +38,8 @@ class Portfolio extends Component {
 
   componentDidMount() {
     const { src, events } = this.props.params;
-    if (!src) throw new Error("404 not Found")
-    files(events ? events : src).then((photos) => {
+    // if (!src) throw new Error("404 not Found")
+    files(this.props.title).then((photos) => {
       this.setState({ photos: photos })
     }).catch((err) => {
       throw new Error(err)
@@ -93,16 +93,16 @@ class Portfolio extends Component {
         if (events === 'rakrakan-festival')
           this.state.title != 'Rakrakan Festival' &&
             this.setState({ title: "Rakrakan Festival" })
-        if (events === 'wowowin')
+        else if (events === 'wowowin')
           this.state.title != 'Wowowin' &&
             this.setState({ title: "Wowowin" })
-        if (events === 'showtime')
+        else if (events === 'showtime')
           this.state.title != 'Showtime' &&
             this.setState({ title: "Showtime" })
-        if (events === 'jakul')
+        else if (events === 'jakul')
           this.state.title != 'Jakul' &&
             this.setState({ title: "Jakul" })
-        else return;
+      break;  
       default:
         return
     }

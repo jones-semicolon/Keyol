@@ -72,6 +72,7 @@ img {
   background-image: linear-gradient(to right,hsl(0 0% 50%), hsl(0 0% 70%), hsl(0 0% 50%));
   background-size: 300% 100%;
   animation: bgLoading 2s infinite;
+  user-select: none;
 }
 
 .ReactModal__Content{

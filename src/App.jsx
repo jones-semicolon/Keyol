@@ -26,6 +26,10 @@ const App = createBrowserRouter([
         path: ":src/:events",
         element: <Portfolio />
       },
+      {
+        path: "events/wowowin",
+        element: <Portfolio title="wowowin" />
+      }
     ],
     errorElement: <Error />
   }

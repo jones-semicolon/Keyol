@@ -26,8 +26,8 @@ export class Navbar extends Component {
     })
   }
 
-  hide(e){
-    this.setState({isBurgerOpen: false})
+  hide(e) {
+    this.setState({ isBurgerOpen: false })
   }
 
   render() {
@@ -37,7 +37,7 @@ export class Navbar extends Component {
       <>
         <Nav scrolled={(!isScrolled && !isBurgerOpen) ? "transparent" : undefined}>
           <Topbar>
-            <Link to="/"><h1>Keyol</h1></Link>
+            <Link to="/" onClick={(e) => this.hide(e)}><h1>Keyol</h1></Link>
             <Burger
               onClick={() =>
                 this.setState({
@@ -58,15 +58,20 @@ export class Navbar extends Component {
             <ListItem active={+(pathname === "/portraits")}>
               <Link to="/portraits" onClick={(e) => this.hide(e)}>Portraits</Link></ListItem>
             <ListItem>
-              <Link to="/events">Events <FontAwesomeIcon icon={["fas", "chevron-down"]} onClick={(e) =>
+              <div>
+              <Link to="/events">Events</Link>
+<FontAwesomeIcon icon={["fas", `chevron-${isEventOpen ? "up" : "down"}`]} onClick={(e) => {
+                e.stopPropagation();
                 this.setState({
                   isEventOpen: !isEventOpen
-                })} /></Link>
+                })
+              }} />
+              </div>
               <SubList isopen={isEventOpen ? "flex" : "none"} >
-                <ListItem active={+(pathname === "/event/rakrakan-festival")}><Link to="/event/rakrakan-festival" onClick={(e) => this.hide(e)}>Rakrakan Festival</Link></ListItem>
-                <ListItem active={+(pathname === "/event/wowowin")}><Link to="/event/wowowin" onClick={(e) => this.hide(e)}>Wowowin</Link></ListItem>
-                <ListItem active={+(pathname === "/event/showtime")}><Link to="/event/showtime" onClick={(e) => this.hide(e)}>Showtime</Link></ListItem>
-                <ListItem active={+(pathname === "/event/jakul")}><Link to="/event/jakul" onClick={(e) => this.hide(e)}>Jakul</Link></ListItem>
+                <ListItem active={+(pathname === "/event/rakrakan-festival")}><Link to="/events/rakrakan-festival" onClick={(e) => this.hide(e)}>Rakrakan Festival</Link></ListItem>
+                <ListItem active={+(pathname === "/event/wowowin")}><Link to="/events/wowowin" onClick={(e) => this.hide(e)}>Wowowin</Link></ListItem>
+                <ListItem active={+(pathname === "/event/showtime")}><Link to="/events/showtime" onClick={(e) => this.hide(e)}>Showtime</Link></ListItem>
+                <ListItem active={+(pathname === "/event/jakul")}><Link to="/events/jakul" onClick={(e) => this.hide(e)}>Jakul</Link></ListItem>
               </SubList>
             </ListItem>
             <ListItem active={+(pathname === "/still-life")}>

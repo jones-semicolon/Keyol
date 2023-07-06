@@ -27,6 +27,7 @@ const Title = styled.div`
   align-items: center;
   flex-direction: column;
   padding: clamp(1rem, 5vw, 5rem);
+  text-transform: Capitalize;
   text-align: center;
   & > * {
     max-width: 500px;
@@ -120,7 +121,10 @@ const ListItem = styled.li`
     align-items: center;
     user-select: none;
     padding: .25rem .5rem;
-  }
+  };
+  & a {
+    flex-grow: 1;
+  {
 `
 
 const SubList = styled(List)`
