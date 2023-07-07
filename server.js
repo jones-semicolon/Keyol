@@ -32,7 +32,6 @@ function readDirRecursive(dir, baseUrl, range, callback) {
           const ext = path.extname(filePath).slice(1).toLowerCase();
           if (range > 0 && result.files.length > range) return
           if (['mp4', 'mov', 'avi', 'flv', 'wmv'].includes(ext)) {
-            // Set width and height of video files to 3 and 2
             result.files.push({
               src: `${baseUrl}/${path.relative(path.join(__dirname, 'public'), filePath)}`,
               fileType: "video",
