@@ -30,9 +30,9 @@ function readDirRecursive(dir, baseUrl, range, callback) {
           });
         } else {
           const ext = path.extname(filePath).slice(1).toLowerCase();
+          if (range > 0 && result.files.length > range) return
           if (['mp4', 'mov', 'avi', 'flv', 'wmv'].includes(ext)) {
             // Set width and height of video files to 3 and 2
-            if (!range && result.files.length > range) return
             result.files.push({
               src: `${baseUrl}/${path.relative(path.join(__dirname, 'public'), filePath)}`,
               fileType: "video",
@@ -65,11 +65,12 @@ function readDirRecursive(dir, baseUrl, range, callback) {
 
 app.post("/images", async (req, res) => {
   const folder = await req.body.folder
+  const range = await req.body.range
   const directoryPath = path.join(__dirname, 'public');
   const baseUrl = `${req.protocol}://${req.get('host')}`;
   const directory = `${directoryPath}/${folder}`
 
-  readDirRecursive(folder ? directory : directoryPath, baseUrl, folder ? 0 : 5, (err, result) => {
+  readDirRecursive(folder ? directory : directoryPath, baseUrl, range, (err, result) => {
     if (err) {
       res.sendStatus(400)
       return console.log('Unable to scan directory: ' + err);
