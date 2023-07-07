@@ -15,21 +15,41 @@ const App = createBrowserRouter([
         element: <Home />
       },
       {
-        path: ":src",
-        element: <Portfolio />
-      },
-      {
         path: "events",
         element: <Events />
       },
       {
-        path: ":src/:events",
-        element: <Portfolio />
-      },
-      {
         path: "events/wowowin",
         element: <Portfolio title="wowowin" />
-      }
+      },
+      {
+        path: "events/showtime",
+        element: <Portfolio title="showtime" />
+      },
+      {
+        path: "events/jakul",
+        element: <Portfolio title="jakul" />
+      },
+      {
+        path: "events/rakrakan-festival",
+        element: <Portfolio title="rakrakan-festival" />
+      },
+      {
+        path: "nature",
+        element: <Portfolio title="nature" />
+      },
+      {
+        path: "portraits",
+        element: <Portfolio title="portraits" />
+      },
+      {
+        path: "still-life",
+        element: <Portfolio title="still-life" />
+      },
+      {
+        path: "sports",
+        element: <Portfolio title="sports" />
+      },
     ],
     errorElement: <Error />
   }

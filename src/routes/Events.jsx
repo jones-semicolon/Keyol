@@ -5,31 +5,28 @@ export default class Events extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      folder: {
-        folders: []
+      folders: {
       },
     }
   }
   componentDidMount() {
-    importImages("events", 5).then((folder) => {
-      console.log(folder)
-      this.setState({ folder: folder["events"] })
+    axios.post("/images", { folder: "events", range: 5 }).then((res) => {
+      this.setState({ folders: res.data })
     })
   }
   render() {
-    const { folder } = this.state
+    const { folders } = this.state
     return (
-      < Content >
+      <Content>
         <Title>
           <h2>Events</h2>
         </Title>
         <Gallery className="gallery">
           {
-            folder?.folders.map(({ name, files, folders }, key) => {
-              if (!name) return
+            folders?.folders.map(({ name, files, folders }, key) => {
               return (
-                <Folder key={key} to={`/events/${name}`} delay={key}>
-                  <img src={files[0].src} loading="lazy" />
+                <Folder key={name} to={`/events/${name}`} delay={key}>
+                  <img src={files.length ? files[Math.floor(Math.random() * files.length)].src : folders[Math.floor(Math.random() * folders.length)].files[Math.floor(Math.random() * files.length)].src} loading="lazy" />
                   <TextOverlay>{name}</TextOverlay>
                 </Folder>)
             })

@@ -7,6 +7,7 @@ import { Content, Title } from "../components/styled";
 import ScrollTop from '../components/ScrollTop'
 import imagesloaded from 'imagesloaded'
 import Modal from "../components/Modal";
+import axios from "axios"
 
 function portfolioRoute(PortfolioRoute) {
   return function WrappedPrarams(props) {
@@ -24,7 +25,7 @@ class Portfolio extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      photos: [],
+      folders: [],
       isLoaded: false,
       title: "" || this.props.title,
       modal: {
@@ -37,29 +38,25 @@ class Portfolio extends Component {
   }
 
   componentDidMount() {
-    const { src, events } = this.props.params;
-    // if (!src) throw new Error("404 not Found")
-    files(this.props.title).then((photos) => {
-      this.setState({ photos: photos })
+    axios.post("/images", { folder: this.props.title }).then((res) => {
+      this.setState({ folders: res.data })
     }).catch((err) => {
       throw new Error(err)
     })
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { src, events } = this.props.params;
-    if (prevProps.params.src !== src || prevProps.params.events !== events) {
+    if (prevProps.title !== this.props.title) {
       window.scrollTo(0, 0);
-      this.setState({ photos: [] });
+      this.setState({ folders: {} });
       this.setState({ isLoaded: false })
-      files(events ? events : src).then((photos) => {
-        this.setState({ photos: photos })
+      axios.post("/images", { folder: this.props.title }).then((res) => {
+        this.setState({ folders: res.data })
       }).catch((err) => {
         throw new Error(err)
       })
     }
-    this.checkLink(this.props.params)
-    if (!prevState.photos.length && this.state.photos.length) {
+    if (!Object.keys(prevState.folders).length && Object.keys(this.state.folders).length) {
       imagesloaded('.react-photo-album', (inst) => {
         if (!inst.images.length && this.state.isLoaded) return
         this.setState({ isLoaded: true })
@@ -102,14 +99,14 @@ class Portfolio extends Component {
         else if (events === 'jakul')
           this.state.title != 'Jakul' &&
             this.setState({ title: "Jakul" })
-      break;  
+        break;
       default:
         return
     }
   }
 
   render() {
-    const { photos, isLoaded, title, modal } = this.state;
+    const { isLoaded, title, modal, folders } = this.state;
     return (
       <>
         <Modal {...modal} close={() => this.setState({ modal: { state: false, src: "" } })} />
@@ -118,10 +115,40 @@ class Portfolio extends Component {
           <Title>
             <h2>{title}</h2>
           </Title>
-          < PhotoAlbum layout="rows" photos={photos} targetRowHeight={rowHeightConfig}
+          {
+            folders?.folders &&
+            folders?.folders?.map(
+              ({ files, name, folders }, key) => (
+                <PhotoAlbum
+                  layout="rows"
+                  photos={files}
+                  targetRowHeight={rowHeightConfig}
+                  onClick={({ index }) => {
+                    this.setState({
+                      modal: {
+                        state: true,
+                        ...photos[index]
+                      }
+                    })
+                  }}
+                  key={name}
+                />
+              )
+            )
+          }
+          <PhotoAlbum
+            layout="rows"
+            photos={folders?.files}
+            targetRowHeight={rowHeightConfig}
             onClick={({ index }) => {
-              this.setState({ modal: { state: true, ...photos[index] } })
-            }} />
+              this.setState({
+                modal: {
+                  state: true,
+                  ...photos[index]
+                }
+              })
+            }}
+          />
           <ScrollTop />
         </Content>
       </>

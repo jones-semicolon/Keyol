@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import { Content, Title, Gallery, Folder, TextOverlay } from "../components/styled"
+import axios from "axios"
 import { loadAll } from '../components/Files'
 export default class Home extends Component {
   constructor(props) {
@@ -9,12 +10,17 @@ export default class Home extends Component {
     }
   }
   componentDidMount() {
-    loadAll().then((files) => {
-      this.setState({ folder: files })
+    // loadAll().then((files) => {
+    //   this.setState({ folder: files })
+    // })
+    axios.post("/images").then((res) => {
+      console.log(res)
+      this.setState({ folder: res.data.folders })
     })
   }
   render() {
     const { folder } = this.state
+    console.log(folder)
     return (
       < Content >
         <Title>

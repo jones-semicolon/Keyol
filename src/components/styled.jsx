@@ -18,8 +18,19 @@ const Content = styled.div`
   position: relative;
   width: 100%;
   min-height: 100%;
-  flex-grow: 1;
   outline-color: red;
+  @media (width < 300px) {
+    grid-gap: 5px;
+  };
+  @media (width >= 300px) {
+    grid-gap: 10px;
+  };
+  @media (600px <= width <= 1200px) {
+    grid-gap: 15px;
+  };
+  @media (width >= 1200px) {
+    grid-gap: 20px;
+  };
 `
 const Title = styled.div`
   display: flex;
