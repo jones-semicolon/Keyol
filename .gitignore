@@ -7,7 +7,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-public
+public/*
+!public/portraits/*
 dist
 dist-ssr
 *.local
