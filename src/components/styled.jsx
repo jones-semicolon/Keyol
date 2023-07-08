@@ -124,6 +124,9 @@ const ListItem = styled.li`
   ${({ active }) => active && `
     color: var(--active);
   `};
+  &:hover, &:active {
+    color: var(--active);
+  }
   & > * {
     display: flex;
     flex-grow: 1;

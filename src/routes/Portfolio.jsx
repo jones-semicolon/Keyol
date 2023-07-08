@@ -18,7 +18,7 @@ function portfolioRoute(PortfolioRoute) {
 
 function rowHeightConfig(containerWidth) {
   if (containerWidth < 768) return (containerWidth / 1.5);
-  return (containerWidth / 3);
+  return (containerWidth / 2.5);
 }
 
 class Portfolio extends Component {
