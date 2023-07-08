@@ -40,7 +40,6 @@ function readDirRecursive(dir, baseUrl, range, callback) {
               modifiedTime: stat.mtime
             });
           } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) {
-            // Get dimensions of image files using image-size package
             const dimensions = sizeOf(filePath);
             result.files.push({
               src: `${baseUrl}/${path.relative(path.join(__dirname, 'public'), filePath)}`,
