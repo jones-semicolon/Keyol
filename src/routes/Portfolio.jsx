@@ -97,7 +97,6 @@ class Portfolio extends Component {
             <h2>{title}</h2>
           </Title>
           {
-            folders?.folders &&
             folders?.folders?.map(
               ({ files, name, folders }) => (
                 <PhotoAlbum
