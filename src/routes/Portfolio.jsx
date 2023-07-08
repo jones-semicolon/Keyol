@@ -2,7 +2,7 @@ import { Component } from "react";
 import Loader from "../components/Loader"
 import PhotoAlbum from "react-photo-album";
 import { useParams, useLocation } from "react-router-dom";
-import { Content, Title } from "../components/styled";
+import { Content, Title } from "../styles/styled";
 import ScrollTop from '../components/ScrollTop'
 import imagesloaded from 'imagesloaded'
 import Modal from "../components/Modal";

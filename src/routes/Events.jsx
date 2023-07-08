@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { Content, Title, Gallery, Folder, TextOverlay } from "../components/styled"
+import { Content, Title, Gallery, Folder, TextOverlay } from "../style/styled"
 import { importImages } from '../components/Files'
 export default class Events extends Component {
   constructor(props) {

@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { Content, Title, Gallery, Folder, TextOverlay } from "../components/styled"
+import { Content, Title, Gallery, Folder, TextOverlay } from "../styles/styled"
 import axios from "axios"
 import Loader from '../components/Loader'
 export default class Home extends Component {

@@ -1,5 +1,5 @@
 import { Component, Suspense } from 'react'
-import { Nav, Burger, Topbar, List, ListItem, ContactList, SubList } from './styled';
+import { Nav, Burger, Topbar, List, ListItem, ContactList, SubList } from '../styles/styled';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Loader from "./Loader"
