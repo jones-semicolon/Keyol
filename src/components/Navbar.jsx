@@ -1,7 +1,8 @@
-import { Component } from 'react'
+import { Component, Suspense } from 'react'
 import { Nav, Burger, Topbar, List, ListItem, ContactList, SubList } from './styled';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Loader from "./Loader"
 
 function navbarRoute(NavRoute) {
   return function wrappedNav(props) {
@@ -59,13 +60,13 @@ export class Navbar extends Component {
               <Link to="/portraits" onClick={(e) => this.hide(e)}>Portraits</Link></ListItem>
             <ListItem>
               <div>
-              <Link to="/events">Events</Link>
-<FontAwesomeIcon icon={["fas", `chevron-${isEventOpen ? "up" : "down"}`]} onClick={(e) => {
-                e.stopPropagation();
-                this.setState({
-                  isEventOpen: !isEventOpen
-                })
-              }} />
+                <Link to="/events">Events</Link>
+                <FontAwesomeIcon icon={["fas", `chevron-${isEventOpen ? "up" : "down"}`]} onClick={(e) => {
+                  e.stopPropagation();
+                  this.setState({
+                    isEventOpen: !isEventOpen
+                  })
+                }} />
               </div>
               <SubList isopen={isEventOpen ? "flex" : "none"} >
                 <ListItem active={+(pathname === "/event/rakrakan-festival")}><Link to="/events/rakrakan-festival" onClick={(e) => this.hide(e)}>Rakrakan Festival</Link></ListItem>
@@ -87,7 +88,9 @@ export class Navbar extends Component {
             </ContactList>
           </List>
         </Nav>
-        <Outlet />
+        <Suspense fallback={<Loader />}>
+          <Outlet />
+        </Suspense>
       </>
     )
   }

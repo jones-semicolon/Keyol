@@ -76,6 +76,12 @@ img {
   user-select: none;
 }
 
+@media(hover: hover) and (pointer: fine) {
+  img:hover {
+    filter: brightness(0.5);
+  }
+}
+
 .ReactModal__Content{
   opacity: 0;
   transition: opacity 150ms cubic-bezier(0.47, 0, 0.745, 0.715);

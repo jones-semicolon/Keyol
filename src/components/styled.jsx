@@ -138,7 +138,7 @@ const ListItem = styled.li`
   };
   & a {
     flex-grow: 1;
-  {
+  }
 `
 
 const SubList = styled(List)`

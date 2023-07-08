@@ -1,7 +1,7 @@
 import { Component } from "react";
 import Loader from "../components/Loader"
 import PhotoAlbum from "react-photo-album";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { Content, Title } from "../components/styled";
 import ScrollTop from '../components/ScrollTop'
 import imagesloaded from 'imagesloaded'
@@ -12,7 +12,8 @@ import PropTypes from 'prop-types'
 function portfolioRoute(PortfolioRoute) {
   return function WrappedPrarams(props) {
     const params = useParams();
-    return <PortfolioRoute {...props} params={params} />
+    const location = useLocation();
+    return <PortfolioRoute {...props} params={params} location={location} />
   }
 }
 
@@ -46,7 +47,7 @@ class Portfolio extends Component {
           if (resp) {
             resp.json().then(data => {
               if (Date.now() - data.timestamp < 5 * 60 * 1000) {
-                axios.post("/images", { folder: this.props.title }).then((res) => {
+                axios.post("/images", { folder: this.props.location.pathname }).then((res) => {
                   const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
                   cache.put(this.props.title, data);
                   this.setState({ folders: res.data, isLoaded: true })
@@ -57,7 +58,7 @@ class Portfolio extends Component {
               else { this.setState({ folders: data.folders, isLoaded: true }); }
             });
           } else {
-            axios.post("/images", { folder: this.props.title }).then((res) => {
+            axios.post("/images", { folder: this.props.location.pathname }).then((res) => {
               const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
               cache.put(this.props.title, data);
               this.setState({ folders: res.data, isLoaded: true })
