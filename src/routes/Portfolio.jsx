@@ -2,12 +2,12 @@ import { Component } from "react";
 import Loader from "../components/Loader"
 import PhotoAlbum from "react-photo-album";
 import { useParams } from "react-router-dom";
-import files, { importImages } from "../components/Files";
 import { Content, Title } from "../components/styled";
 import ScrollTop from '../components/ScrollTop'
 import imagesloaded from 'imagesloaded'
 import Modal from "../components/Modal";
 import axios from "axios"
+import PropTypes from 'prop-types'
 
 function portfolioRoute(PortfolioRoute) {
   return function WrappedPrarams(props) {
@@ -31,29 +31,36 @@ class Portfolio extends Component {
       modal: {
         state: false,
         src: "",
-        height: "",
-        width: "",
+        height: 0,
+        width: 0,
       },
     }
   }
 
   initialize() {
     window.scrollTo(0, 0);
-    console.log('caches' in window)
+    this.setState({ isLoaded: false })
     if ('caches' in window) {
       caches.open('images').then((cache) => {
         cache.match(this.props.title).then(resp => {
           if (resp) {
             resp.json().then(data => {
               if (Date.now() - data.timestamp < 5 * 60 * 1000) {
-                this.setState({ folders: data.folders });
+                axios.post("/images", { folder: this.props.title }).then((res) => {
+                  const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
+                  cache.put(this.props.title, data);
+                  this.setState({ folders: res.data, isLoaded: true })
+                }).catch((err) => {
+                  throw new Error(err)
+                })
               }
+              else { this.setState({ folders: data.folders, isLoaded: true }); }
             });
           } else {
             axios.post("/images", { folder: this.props.title }).then((res) => {
               const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
               cache.put(this.props.title, data);
-              this.setState({ folders: res.data })
+              this.setState({ folders: res.data, isLoaded: true })
             }).catch((err) => {
               throw new Error(err)
             })
@@ -92,7 +99,7 @@ class Portfolio extends Component {
           {
             folders?.folders &&
             folders?.folders?.map(
-              ({ files, name, folders }, key) => (
+              ({ files, name, folders }) => (
                 <PhotoAlbum
                   layout="rows"
                   photos={files}
@@ -101,7 +108,7 @@ class Portfolio extends Component {
                     this.setState({
                       modal: {
                         state: true,
-                        ...photos[index]
+                        ...files[index]
                       }
                     })
                   }}
@@ -118,7 +125,7 @@ class Portfolio extends Component {
               this.setState({
                 modal: {
                   state: true,
-                  ...photos[index]
+                  ...folders?.files[index]
                 }
               })
             }}
@@ -131,3 +138,7 @@ class Portfolio extends Component {
 }
 
 export default portfolioRoute(Portfolio)
+
+Portfolio.propTypes = {
+  title: PropTypes.string
+}

@@ -45,7 +45,7 @@ export default class Modal extends Component {
         }}
       >
         {
-          this.props.fileType === "mp4" ?
+          this.props.fileType === "video" ?
             <video src={this.props.src} autoPlay controls playsInline controlsList="nodownload disablepictureinpicture" style={{ width: "100%", objectFit: "contain" }}></video> :
             <img src={this.props.src} alt="" style={{ width: "100%", objectFit: "contain" }} />
         }
@@ -59,5 +59,7 @@ Modal.propTypes = {
   src: PropTypes.string,
   close: PropTypes.func,
   state: PropTypes.bool,
-  fileType: PropTypes.string
+  fileType: PropTypes.string,
+  height: PropTypes.number,
+  width: PropTypes.number
 }

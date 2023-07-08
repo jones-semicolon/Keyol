@@ -123,10 +123,15 @@ img {
   #root {
     flex-direction: row;
   }
+  .ReactModal__Content {
+    width: auto !important;
+  }
 }
 
 @media (width > 768px){
 }
+
+
 
 
 @media (prefers-color-scheme: light) {
