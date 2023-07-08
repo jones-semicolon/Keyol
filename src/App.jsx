@@ -50,6 +50,10 @@ const App = createBrowserRouter([
         path: "sports",
         element: <Portfolio title="sports" />
       },
+      {
+        path: "debug",
+        element: <Portfolio title="debug" />
+      },
     ],
     errorElement: <Error />
   }

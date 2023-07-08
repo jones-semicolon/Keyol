@@ -17,8 +17,8 @@ const Content = styled.div`
   padding-bottom: 5rem;
   position: relative;
   width: 100%;
-  min-height: 100%;
-  outline-color: red;
+  min-height: 100vh;
+  outline-color: blue;
   @media (width < 300px) {
     grid-gap: 5px;
   };

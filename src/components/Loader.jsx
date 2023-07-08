@@ -9,6 +9,7 @@ const Container = styled.div`
   max-height: 100vh;
   height: 100%;
   width: 100%;
+  outline-color: red;
   justify-content: center;
   align-items: center;
   z-index: 20;
@@ -66,7 +67,7 @@ export default class Loader extends Component {
   render() {
     return (
       <Container >
-        <Ring size={25} />
+        <Ring size={+25} />
       </Container>
     )
   }

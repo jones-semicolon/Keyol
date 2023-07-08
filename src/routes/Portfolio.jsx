@@ -25,7 +25,7 @@ class Portfolio extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      folders: [],
+      folders: {},
       isLoaded: false,
       title: "" || this.props.title,
       modal: {
@@ -37,71 +37,45 @@ class Portfolio extends Component {
     }
   }
 
+  initialize() {
+    window.scrollTo(0, 0);
+    console.log('caches' in window)
+    if ('caches' in window) {
+      caches.open('images').then((cache) => {
+        cache.match(this.props.title).then(resp => {
+          if (resp) {
+            resp.json().then(data => {
+              if (Date.now() - data.timestamp < 5 * 60 * 1000) {
+                this.setState({ folders: data.folders });
+              }
+            });
+          } else {
+            axios.post("/images", { folder: this.props.title }).then((res) => {
+              const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
+              cache.put(this.props.title, data);
+              this.setState({ folders: res.data })
+            }).catch((err) => {
+              throw new Error(err)
+            })
+          }
+        })
+      });
+    }
+  }
+
   componentDidMount() {
-    axios.post("/images", { folder: this.props.title }).then((res) => {
-      this.setState({ folders: res.data })
-    }).catch((err) => {
-      throw new Error(err)
-    })
+    this.initialize()
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.title !== this.props.title) {
-      window.scrollTo(0, 0);
-      this.setState({ folders: {} });
-      this.setState({ isLoaded: false })
-      axios.post("/images", { folder: this.props.title }).then((res) => {
-        this.setState({ folders: res.data })
-      }).catch((err) => {
-        throw new Error(err)
-      })
+      this.initialize()
     }
-    if (!Object.keys(prevState.folders).length && Object.keys(this.state.folders).length) {
+    if (!prevState.folders && this.state.folders) {
       imagesloaded('.react-photo-album', (inst) => {
         if (!inst.images.length && this.state.isLoaded) return
         this.setState({ isLoaded: true })
       })
-    }
-  }
-
-  checkLink({ src, events }) {
-    switch (src) {
-      case 'debug':
-        this.state.title != 'Portraits' &&
-          this.setState({ title: "Portraits" })
-        break;
-      case 'portraits':
-        this.state.title != 'Portraits' &&
-          this.setState({ title: "Portraits" })
-        break;
-      case 'nature':
-        this.state.title != 'Nature' &&
-          this.setState({ title: "Nature" })
-        break;
-      case 'sports':
-        this.state.title != 'Sports' &&
-          this.setState({ title: "Sports" })
-        break;
-      case 'still-life':
-        this.state.title != 'Still Life' &&
-          this.setState({ title: "Still Life" })
-        break;
-      case 'events':
-        if (events === 'rakrakan-festival')
-          this.state.title != 'Rakrakan Festival' &&
-            this.setState({ title: "Rakrakan Festival" })
-        else if (events === 'wowowin')
-          this.state.title != 'Wowowin' &&
-            this.setState({ title: "Wowowin" })
-        else if (events === 'showtime')
-          this.state.title != 'Showtime' &&
-            this.setState({ title: "Showtime" })
-        else if (events === 'jakul')
-          this.state.title != 'Jakul' &&
-            this.setState({ title: "Jakul" })
-        break;
-      default:
-        return
     }
   }
 
