@@ -11,10 +11,6 @@ export default class Home extends Component {
     }
   }
   initialize() {
-    // this.setState({ isLoaded: false })
-    // axios.post("/images").then((res) => {
-    //   this.setState({ folder: res.data.folders, isLoaded: true })
-    // })
     window.scrollTo(0, 0);
     this.setState({ isLoaded: false })
     if ('caches' in window) {
@@ -31,7 +27,7 @@ export default class Home extends Component {
                   throw new Error(err)
                 })
               }
-              else { this.setState({ folder: data.folder.folders, isLoaded: true }); }
+              else { this.setState({ folder: data.folder, isLoaded: true }); }
             });
           } else {
             axios.post("/images").then((res) => {
@@ -66,7 +62,7 @@ export default class Home extends Component {
         </Title>
         <Gallery className="gallery">
           {
-            folder.map(({ name, files, folders }, key) => {
+            folder?.map(({ name, files, folders }, key) => {
               if (!name) return
               return (
                 <Folder key={key} to={`/${name}`} delay={key}>

@@ -2,12 +2,12 @@ import { keyframes, styled } from "styled-components";
 import { Component } from "react";
 
 const Container = styled.div`
-  position: absolute;
+  position: ${props => props.pos};
   display: flex;
   flex-direction: column;
   inset: 0;
   max-height: 100vh;
-  height: 100%;
+  min-height: 100%;
   width: 100%;
   outline-color: red;
   justify-content: center;
@@ -15,6 +15,7 @@ const Container = styled.div`
   z-index: 20;
   overflow: hidden;
   background: var(--background);
+  flex-grow: 1;
 `
 
 const loadAnim = keyframes`
@@ -67,7 +68,7 @@ export default class Loader extends Component {
   render() {
     return (
       <Container >
-        <Ring size={+25} />
+        <Ring size={+25} pos={this.props.pos ?? "absolute"} />
       </Container>
     )
   }

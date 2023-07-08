@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router-dom"
+import { createBrowserRouter } from "react-router-dom"
 import Navbar from "./components/Navbar"
 import Error from './routes/Error'
 import { lazy, Suspense } from "react"
@@ -15,47 +15,47 @@ const App = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Suspense fallback={<Loader />}><Home /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Home /></Suspense>
       },
       {
         path: "events",
-        element: <Suspense fallback={<Loader />}><Events /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Events /></Suspense>
       },
       {
         path: "events/wowowin",
-        element: <Suspense fallback={<Loader />}><Portfolio title="wowowin" /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Portfolio title="wowowin" /></Suspense>
       },
       {
         path: "events/showtime",
-        element: <Suspense fallback={<Loader />}><Portfolio title="showtime" /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Portfolio title="showtime" /></Suspense>
       },
       {
         path: "events/jakul",
-        element: <Suspense fallback={<Loader />}><Portfolio title="jakul" /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Portfolio title="jakul" /></Suspense>
       },
       {
         path: "events/rakrakan-festival",
-        element: <Suspense fallback={<Loader />}><Portfolio title="rakrakan-festival" /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Portfolio title="rakrakan-festival" /></Suspense>
       },
       {
         path: "nature",
-        element: <Suspense fallback={<Loader />}><Portfolio title="nature" /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Portfolio title="nature" /></Suspense>
       },
       {
         path: "portraits",
-        element: <Suspense fallback={<Loader />}><Portfolio title="portraits" /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Portfolio title="portraits" /></Suspense>
       },
       {
         path: "still-life",
-        element: <Suspense fallback={<Loader />}><Portfolio title="still-life" /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Portfolio title="still-life" /></Suspense>
       },
       {
         path: "sports",
-        element: <Suspense fallback={<Loader />}><Portfolio title="sports" /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Portfolio title="sports" /></Suspense>
       },
       {
         path: "debug",
-        element: <Suspense fallback={<Loader />}><Portfolio title="debug" /></Suspense>
+        element: <Suspense fallback={<Loader pos="unset" />}><Portfolio title="debug" /></Suspense>
       },
     ],
     errorElement: <Error />
