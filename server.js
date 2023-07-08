@@ -66,7 +66,7 @@ app.post("/images", async (req, res) => {
   const range = await req.body.range
   const directoryPath = path.join(__dirname, 'public');
   const baseUrl = `${req.protocol}://${req.get('host')}`;
-  const directory = `${directoryPath}/${folder}`
+  const directory = `${directoryPath}${folder}`
 
   readDirRecursive(folder ? directory : directoryPath, baseUrl, range, (err, result) => {
     if (err) {
