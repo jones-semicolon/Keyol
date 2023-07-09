@@ -35,8 +35,8 @@ function readDirRecursive(dir, baseUrl, range, callback) {
             result.files.push({
               src: `${baseUrl}/${path.relative(path.join(__dirname, 'public'), filePath)}`,
               fileType: "video",
-              width: 3,
-              height: 2,
+              width: 16,
+              height: 9,
               modifiedTime: stat.mtime
             });
           } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) {
