@@ -4,13 +4,15 @@ const { google } = require("googleapis");
 const cors = require('cors');
 const PORT = process.env.PORT || 5174;
 const app = express();
-app.use(express.json());
 app.use(cors({
   origin: '*',
   methods: ['GET'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+app.use(express.json());
 dotenv.config();
+
+let responseSent = false;
 
 const auth = new google.auth.JWT(
   process.env.GOOGLE_CLIENT_EMAIL,
@@ -19,17 +21,23 @@ const auth = new google.auth.JWT(
   ['https://www.googleapis.com/auth/drive']
 );
 
-async function getFolderId(parentFolderId, folderName) {
+async function getFolderId(parentFolderId, folderPath) {
   const drive = google.drive({ version: 'v3', auth });
-  const res = await drive.files.list({
-    q: `'${parentFolderId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed = false and name='${folderName}'`,
-    fields: 'files(id, name)',
-  });
-  if (res.data.files.length > 0) {
-    return res.data.files[0].id;
-  } else {
-    console.log('No folders found with that name.');
+  let currentFolderId = parentFolderId;
+  const folders = folderPath.split('/');
+  for (const folderName of folders) {
+    const res = await drive.files.list({
+      q: `'${currentFolderId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed = false and name='${folderName}'`,
+      fields: 'files(id, name)',
+    });
+    if (res.data.files.length > 0) {
+      currentFolderId = res.data.files[0].id;
+    } else {
+      console.log('No folders found with that name.');
+      return null;
+    }
   }
+  return currentFolderId;
 }
 
 async function readDriveRecursive(folderId, range, callback) {
@@ -41,9 +49,6 @@ async function readDriveRecursive(folderId, range, callback) {
   if (files.length) {
     let pending = files.length;
     for (const file of files) {
-      if (range > 0 && result.files.length >= range) {
-        break;
-      }
       if (file.mimeType === 'application/vnd.google-apps.folder') {
         readDriveRecursive(file.id, range, function(err, res) {
           res.name = file.name;
@@ -90,28 +95,34 @@ async function readDriveRecursive(folderId, range, callback) {
 
 app.get("/images", async (req, res) => {
   const parentFolderId = req.query.folderId
-  const folderName = req.query.folder;
+  const folderPath = req.query.folder;
   const range = req.query.range;
+  let folderName = '';
   if (!parentFolderId) {
     res.status(400).send('Missing required parameter: folderId');
     return;
   }
 
   let folderId = parentFolderId;
-  if (folderName) {
-    folderId = await getFolderId(parentFolderId, folderName);
+  if (folderPath) {
+    folderId = await getFolderId(parentFolderId, folderPath);
     if (!folderId) {
       res.status(404).send('Folder not found');
       return;
     }
+    folderName = folderPath.split('/').pop();
   }
 
   readDriveRecursive(folderId, range, (err, result) => {
     if (err) {
-      res.sendStatus(400);
+      res.sendStatus(400).send("Unable to scan directory");
       return console.log('Unable to scan directory: ' + err);
     }
-    res.json(result);
+    if (!responseSent && result.files.length || result.folders.length) {
+      result.name = folderName
+      res.json(result);
+      responseSent = true;
+    }
   });
 });
 
