@@ -129,6 +129,7 @@ class Portfolio extends Component {
                 }
               })
             }}
+            renderPhoto={({ photo, imageProps }) => photo.fileType === "video" ? <video {...imageProps} /> : <img {...imageProps} />}
           />
           <ScrollTop />
         </Content>

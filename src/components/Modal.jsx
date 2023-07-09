@@ -35,7 +35,7 @@ export default class Modal extends Component {
             right: "auto",
             bottom: "auto",
             maxHeight: "90vh",
-            aspectRatio: this.props.width > this.props.height ? "3 / 2" : "2 / 3",
+            aspectRatio: `${this.props.width} / ${this.props.height}`,
             height: "auto",
             width: "auto",
           },
