@@ -5,7 +5,11 @@ const cors = require('cors');
 const PORT = process.env.PORT || 5174;
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 dotenv.config();
 
 const auth = new google.auth.JWT(
@@ -101,7 +105,7 @@ app.get("/images", async (req, res) => {
       return;
     }
   }
-  
+
   readDriveRecursive(folderId, range, (err, result) => {
     if (err) {
       res.sendStatus(400);
