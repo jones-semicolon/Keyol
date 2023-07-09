@@ -21,12 +21,30 @@ const auth = new google.auth.JWT(
   ['https://www.googleapis.com/auth/drive']
 );
 
+
+async function exponentialBackoff(drive, options, retries = 3) {
+  try {
+    const res = await drive.files.list(options);
+    return res;
+  } catch (err) {
+    if (err.code === 403 && retries > 0) {
+      // Exponential backoff
+      const delay = Math.pow(2, 5 - retries) * 1000;
+      console.log(`Rate limit error, retrying in ${delay}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return exponentialBackoff(drive, options, retries - 1);
+    } else {
+      throw err;
+    }
+  }
+}
+
 async function getFolderId(parentFolderId, folderPath) {
   const drive = google.drive({ version: 'v3', auth });
   let currentFolderId = parentFolderId;
   const folders = folderPath.split('/');
   for (const folderName of folders) {
-    const res = await drive.files.list({
+    const res = await exponentialBackoff(drive, {
       q: `'${currentFolderId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed = false and name='${folderName}'`,
       fields: 'files(id, name)',
     });
@@ -44,7 +62,7 @@ async function readDriveRecursive(folderId, range, callback) {
   let result = { name: '', files: [], folders: [] };
   const drive = google.drive({ version: 'v3', auth });
   const query = `'${folderId}' in parents and trashed = false`;
-  const res = await drive.files.list({ q: query, fields: 'files(id, name, mimeType, imageMediaMetadata, fileExtension, modifiedTime, thumbnailLink)' });
+  const res = await exponentialBackoff(drive, { q: query, fields: 'files(id, name, mimeType, imageMediaMetadata, fileExtension, modifiedTime, thumbnailLink)' });
   const files = res.data.files;
   if (files.length) {
     let pending = files.length;
@@ -55,6 +73,9 @@ async function readDriveRecursive(folderId, range, callback) {
           result.folders.push(res);
           if (!--pending) {
             result.files.sort((a, b) => b.modifiedTime - a.modifiedTime);
+            if (range) {
+              result.files = result.files.slice(0, range);
+            }
             callback(null, result);
           }
         });
@@ -81,6 +102,9 @@ async function readDriveRecursive(folderId, range, callback) {
         }
         if (!--pending) {
           result.files.sort((a, b) => b.modifiedTime - a.modifiedTime);
+          if (range) {
+            result.files = result.files.slice(0, range);
+          }
           callback(null, result);
         }
       }
