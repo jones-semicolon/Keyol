@@ -18,7 +18,7 @@ export default class Events extends Component {
           if (resp) {
             resp.json().then(data => {
               if (Date.now() - data.timestamp < 5 * 60 * 1000) {
-                axios.post("/images").then((res) => {
+                axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=events`).then((res) => {
                   const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
                   cache.put("events", data);
                   this.setState({ folder: res.data.folders, isLoaded: true })
@@ -29,7 +29,7 @@ export default class Events extends Component {
               else { this.setState({ folder: data.folder, isLoaded: true }); }
             });
           } else {
-            axios.post("/images").then((res) => {
+            axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=events`).then((res) => {
               const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
               cache.put("events", data);
               this.setState({ folder: res.data.folders, isLoaded: true })
@@ -42,9 +42,6 @@ export default class Events extends Component {
     }
   }
   componentDidMount() {
-    // axios.post("/images", { folder: "events", range: 5 }).then((res) => {
-    //   this.setState({ folders: res.data })
-    // })
     this.initialize()
   }
   render() {

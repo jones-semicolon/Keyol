@@ -47,7 +47,7 @@ class Portfolio extends Component {
           if (resp) {
             resp.json().then(data => {
               if (Date.now() - data.timestamp < 5 * 60 * 1000) {
-                axios.post("/images", { folder: this.props.location.pathname }).then((res) => {
+                axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.title}`).then((res) => {
                   const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
                   cache.put(this.props.title, data);
                   this.setState({ folders: res.data, isLoaded: true })
@@ -58,7 +58,7 @@ class Portfolio extends Component {
               else { this.setState({ folders: data.folders, isLoaded: true }); }
             });
           } else {
-            axios.post("/images", { folder: this.props.location.pathname }).then((res) => {
+            axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.title}`).then((res) => {
               const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
               cache.put(this.props.title, data);
               this.setState({ folders: res.data, isLoaded: true })
@@ -89,6 +89,7 @@ class Portfolio extends Component {
 
   render() {
     const { isLoaded, title, modal, folders } = this.state;
+    console.log(folders)
     return (
       <>
         <Modal {...modal} close={() => this.setState({ modal: { state: false, src: "" } })} />

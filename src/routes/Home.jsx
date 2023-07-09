@@ -19,7 +19,7 @@ export default class Home extends Component {
           if (resp) {
             resp.json().then(data => {
               if (Date.now() - data.timestamp < 5 * 60 * 1000) {
-                axios.post("/images").then((res) => {
+                axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}`).then((res) => {
                   const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
                   cache.put("home", data);
                   this.setState({ folder: res.data.folders, isLoaded: true })
@@ -30,7 +30,7 @@ export default class Home extends Component {
               else { this.setState({ folder: data.folder, isLoaded: true }); }
             });
           } else {
-            axios.post("/images").then((res) => {
+            axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}`).then((res) => {
               const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
               cache.put("home", data);
               this.setState({ folder: res.data.folders, isLoaded: true })
@@ -54,6 +54,7 @@ export default class Home extends Component {
   }
   render() {
     const { folder, isLoaded } = this.state
+    console.log(folder)
     return (
       <Content>
         {!isLoaded ? <Loader /> : undefined}
