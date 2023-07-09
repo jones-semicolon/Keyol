@@ -1,5 +1,6 @@
 import { keyframes, styled } from "styled-components";
 import { Component } from "react";
+import PropTypes from "prop-types"
 
 const Container = styled.div`
   position: ${props => props.pos};
@@ -67,10 +68,13 @@ export default class Loader extends Component {
 
   render() {
     return (
-      <Container >
-        <Ring size={+25} pos={this.props.pos ?? "absolute"} />
+      <Container pos={this.props.pos ?? `absolute`}>
+        <Ring size={+25} />
       </Container>
     )
   }
 }
 
+Loader.propTypes = {
+  pos: PropTypes.string,
+}
