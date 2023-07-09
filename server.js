@@ -1,9 +1,11 @@
 const express = require("express");
 const dotenv = require('dotenv');
 const { google } = require("googleapis");
+const cors = require('cors');
 const PORT = process.env.PORT || 5174;
 const app = express();
 app.use(express.json());
+app.use(cors());
 dotenv.config();
 
 const auth = new google.auth.JWT(
@@ -35,6 +37,9 @@ async function readDriveRecursive(folderId, range, callback) {
   if (files.length) {
     let pending = files.length;
     for (const file of files) {
+      if (range > 0 && result.files.length >= range) {
+        break;
+      }
       if (file.mimeType === 'application/vnd.google-apps.folder') {
         readDriveRecursive(file.id, range, function(err, res) {
           res.name = file.name;
@@ -46,11 +51,9 @@ async function readDriveRecursive(folderId, range, callback) {
         });
       } else {
         const ext = file.fileExtension.toLowerCase();
-        if (range > 0 && result.files.length > range) return;
-        const thumbnailLink = file.thumbnailLink.split('=')[0];
         if (['mp4', 'mov', 'avi', 'flv', 'wmv'].includes(ext)) {
           result.files.push({
-            src: `${thumbnailLink}=s1280`,
+            src: `${file.thumbnailLink.split('=')[0]}=s1280`,
             fileType: "video",
             width: 16,
             height: 9,
@@ -58,7 +61,7 @@ async function readDriveRecursive(folderId, range, callback) {
           });
         } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) {
           result.files.push({
-            src: `${thumbnailLink}=s1280`,
+            src: `${file.thumbnailLink.split('=')[0]}=s1280`,
             fileType: "image",
             width: file.imageMediaMetadata.width,
             height: file.imageMediaMetadata.height,
@@ -72,6 +75,9 @@ async function readDriveRecursive(folderId, range, callback) {
           callback(null, result);
         }
       }
+    }
+    if (pending === files.length) {
+      callback(null, result);
     }
   } else {
     callback(null, result);
