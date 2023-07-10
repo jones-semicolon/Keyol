@@ -119,6 +119,8 @@ async function readDriveRecursive(folderId, range) {
             name: file.name,
             modifiedTime: new Date(file.modifiedTime),
             thumbnailLink: src,
+            width: 16,
+            height: 9
           });
         } else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
           result.files.push({
@@ -126,7 +128,9 @@ async function readDriveRecursive(folderId, range) {
             fileType: ext,
             name: file.name,
             modifiedTime: new Date(file.modifiedTime),
-            thumbnailLink: src
+            thumbnailLink: src,
+            width: file.imageMediaMetadata.width,
+            height: file.imageMediaMetadata.height
           });
         }
       }
