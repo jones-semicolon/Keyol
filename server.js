@@ -30,6 +30,7 @@ app.get("/image", async (req, res) => {
   }
 
   try {
+    const fetch = (await import('node-fetch')).default
     const response = await fetch(url);
     const contentType = response.headers.get('content-type');
     res.set('Content-Type', contentType);
