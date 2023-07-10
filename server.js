@@ -62,7 +62,7 @@ async function readDriveRecursive(folderId, range, callback) {
   let result = { name: '', files: [], folders: [] };
   const drive = google.drive({ version: 'v3', auth });
   const query = `'${folderId}' in parents and trashed = false`;
-  const res = await exponentialBackoff(drive, { q: query, fields: 'files(id, name, mimeType, imageMediaMetadata, fileExtension, modifiedTime, thumbnailLink)' });
+  const res = await exponentialBackoff(drive, { q: query, fields: 'files(id, name, mimeType, imageMediaMetadata, fileExtension, modifiedTime, thumbnailLink, webContentLink, webViewLink)' });
   const files = res.data.files;
   if (files.length) {
     let pending = files.length;
@@ -81,6 +81,14 @@ async function readDriveRecursive(folderId, range, callback) {
         });
       } else {
         const ext = file.fileExtension.toLowerCase();
+        let src = '';
+        if (file.thumbnailLink) {
+          src = `${file.thumbnailLink.split('=')[0]}=s1280`;
+        } else if (file.webContentLink) {
+          src = file.webContentLink;
+        } else if (file.webViewLink) {
+          src = file.webViewLink;
+        }
         if (['mp4', 'mov', 'avi', 'flv', 'wmv'].includes(ext)) {
           result.files.push({
             src: `${file.thumbnailLink.split('=')[0]}=s1280`,
