@@ -114,7 +114,7 @@ async function readDriveRecursive(folderId, range) {
         }
         if (['mp4', 'mov', 'avi', 'flv', 'wmv'].includes(ext) && !range) {
           result.files.push({
-            src: file.webViewLink,
+            src: file.webContentLink,
             fileType: ext,
             name: file.name,
             modifiedTime: new Date(file.modifiedTime),
