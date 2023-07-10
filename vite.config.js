@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   server: {
     proxy: {
-      '/images': "https://keyol.vercel.app/images",
+      '/images': "https://keyol.vercel.app/",
     }
   },
   base: "/Keyol",

@@ -19,9 +19,9 @@ export default class Home extends Component {
           if (resp) {
             resp.json().then(data => {
               if (Date.now() - data.timestamp < 5 * 60 * 1000) {
-                this.setState({ folder: data.folder, isLoaded: true }); 
+                this.setState({ folder: data.folder, isLoaded: true });
               }
-              else { 
+              else {
                 axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}`).then((res) => {
                   const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
                   cache.put("home", data);
@@ -33,7 +33,6 @@ export default class Home extends Component {
             });
           } else {
             axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}`).then((res) => {
-              console.log(res.data)
               const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
               cache.put("home", data);
               this.setState({ folder: res.data.folders, isLoaded: true })
@@ -66,10 +65,10 @@ export default class Home extends Component {
         <Gallery className="gallery">
           {
             folder?.map(({ name, files, folders }, key) => {
-              if (!name) return
+              if (!name && !files.length) return
               return (
                 <Folder key={key} to={`/${name}`} delay={key}>
-                  <img src={files.length ? files[Math.floor(Math.random() * files.length)].src : folders[Math.floor(Math.random(folders.length))].files[Math.floor(Math.random() * files.length)].src} loading="lazy" />
+                  <img src={files.length ? files[Math.floor(Math.random() * files.length)].src : folders[Math.floor(Math.random(folders.length))]?.files[Math.floor(Math.random() * files.length)].src} loading="lazy" />
                   <TextOverlay>{name}</TextOverlay>
                 </Folder>)
             })

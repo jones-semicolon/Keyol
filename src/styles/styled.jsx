@@ -122,9 +122,11 @@ const ListItem = styled.li`
   width: 100%;
   position: relative;
   ${({ active }) => active && `
-    color: var(--active);
+    & > div {
+      color: var(--active);
+    }
   `};
-  &:hover, &:active {
+  & > div:hover, & > div:active {
     color: var(--active);
   }
   & > * {

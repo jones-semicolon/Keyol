@@ -1,13 +1,14 @@
-import { Component, Suspense } from 'react'
-import { Nav, Burger, Topbar, List, ListItem, ContactList, SubList } from '../styles/styled';
-import { Outlet, Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Loader from "./Loader"
+import PropTypes from 'prop-types';
+import { Component, Suspense } from 'react';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Burger, ContactList, List, ListItem, Nav, SubList, Topbar } from '../styles/styled';
+import Loader from "./Loader";
 
 function navbarRoute(NavRoute) {
   return function wrappedNav(props) {
     const location = useLocation();
-    return <NavRoute location={location} />
+    return <NavRoute location={location} {...props} />
   }
 }
 
@@ -57,8 +58,8 @@ export class Navbar extends Component {
           </Topbar>
           <List isopen={isBurgerOpen ? "flex" : "none"}>
             <ListItem active={+(pathname === "/portraits")}>
-              <Link to="/portraits" onClick={(e) => this.hide(e)}>Portraits</Link></ListItem>
-            <ListItem>
+              <div><Link to="/portraits" onClick={(e) => this.hide(e)}>Portraits</Link></div></ListItem>
+            <ListItem active={+(pathname === '/events')}>
               <div>
                 <Link to="/events">Events</Link>
                 <FontAwesomeIcon icon={["fas", `chevron-${isEventOpen ? "up" : "down"}`]} onClick={(e) => {
@@ -69,18 +70,18 @@ export class Navbar extends Component {
                 }} />
               </div>
               <SubList isopen={isEventOpen ? "flex" : "none"} >
-                <ListItem active={+(pathname === "/event/rakrakan-festival")}><Link to="/events/rakrakan-festival" onClick={(e) => this.hide(e)}>Rakrakan Festival</Link></ListItem>
-                <ListItem active={+(pathname === "/event/wowowin")}><Link to="/events/wowowin" onClick={(e) => this.hide(e)}>Wowowin</Link></ListItem>
-                <ListItem active={+(pathname === "/event/showtime")}><Link to="/events/showtime" onClick={(e) => this.hide(e)}>Showtime</Link></ListItem>
-                <ListItem active={+(pathname === "/event/jakul")}><Link to="/events/jakul" onClick={(e) => this.hide(e)}>Jakul</Link></ListItem>
+                <ListItem active={+(pathname === "/event/rakrakan-festival")}><div><Link to="/events/rakrakan-festival" onClick={(e) => this.hide(e)}>Rakrakan Festival</Link></div></ListItem>
+                <ListItem active={+(pathname === "/event/wowowin")}><div><Link to="/events/wowowin" onClick={(e) => this.hide(e)}>Wowowin</Link></div></ListItem>
+                <ListItem active={+(pathname === "/event/showtime")}><div><Link to="/events/showtime" onClick={(e) => this.hide(e)}>Showtime</Link></div></ListItem>
+                <ListItem active={+(pathname === "/event/jakul")}><div><Link to="/events/jakul" onClick={(e) => this.hide(e)}>Jakul</Link></div></ListItem>
               </SubList>
             </ListItem>
             <ListItem active={+(pathname === "/still-life")}>
-              <Link to="/still-life" onClick={(e) => this.hide(e)}>Still Life</Link></ListItem>
+              <div><Link to="/still-life" onClick={(e) => this.hide(e)}>Still Life</Link></div></ListItem>
             <ListItem active={+(pathname === "/nature")}>
-              <Link to="/nature" onClick={(e) => this.hide(e)}>Nature</Link></ListItem>
+              <div><Link to="/nature" onClick={(e) => this.hide(e)}>Nature</Link></div></ListItem>
             <ListItem active={+(pathname === "/sports")}>
-              <Link to="/sports" onClick={(e) => this.hide(e)}>Sports</Link></ListItem>
+              <div><Link to="/sports" onClick={(e) => this.hide(e)}>Sports</Link></div></ListItem>
             <ContactList>
               <FontAwesomeIcon icon={["fab", "facebook"]} />
               <FontAwesomeIcon icon={["fab", "instagram"]} />
@@ -97,3 +98,7 @@ export class Navbar extends Component {
 }
 
 export default navbarRoute(Navbar);
+
+Navbar.propTypes = {
+  location: PropTypes.object
+}
