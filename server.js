@@ -67,46 +67,41 @@ async function exponentialBackoff(drive, options, retries = 3) {
   }
 }
 
-async function getFolderId(parentFolderId, folderPath) {
+async function getFolderId(parentFolder, folderPath) {
   const drive = google.drive({ version: 'v3', auth });
-  let currentFolderId = parentFolderId;
+  let currentFolder = parentFolder;
   const folders = folderPath.split('/');
   for (const folderName of folders) {
     const res = await exponentialBackoff(drive, {
-      q: `'${currentFolderId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed = false and name='${folderName}'`,
+      q: `'${currentFolder.id}' in parents and mimeType='application/vnd.google-apps.folder' and trashed = false and name='${folderName}'`,
       fields: 'files(id, name)',
     });
     if (res.data.files.length > 0) {
-      currentFolderId = res.data.files[0].id;
+      currentFolder = {id: res.data.files[0].id, name: res.data.files[0].name};
     } else {
       console.log('No folders found with that name.');
       return null;
     }
   }
-  return currentFolderId;
+  return currentFolder;
 }
 
-async function readDriveRecursive(folderId, range, callback) {
+async function readDriveRecursive(folderId, range) {
   let result = { name: '', files: [], folders: [] };
   const drive = google.drive({ version: 'v3', auth });
   const query = `'${folderId}' in parents and trashed = false`;
   const res = await exponentialBackoff(drive, { q: query, fields: 'files(id, name, mimeType, imageMediaMetadata, fileExtension, modifiedTime, thumbnailLink, webContentLink, webViewLink)' });
   const files = res.data.files;
   if (files.length) {
-    let pending = files.length;
+    const folderPromises = [];
     for (const file of files) {
       if (file.mimeType === 'application/vnd.google-apps.folder') {
-        readDriveRecursive(file.id, range, function(err, res) {
-          res.name = file.name;
-          result.folders.push(res);
-          if (!--pending) {
-            result.files.sort((a, b) => b.modifiedTime - a.modifiedTime);
-            if (range) {
-              result.files = result.files.slice(0, range);
-            }
-            callback(null, result);
-          }
-        });
+        folderPromises.push(
+          readDriveRecursive(file.id, range).then(res => {
+            res.name = file.name;
+            result.folders.push(res);
+          })
+        );
       } else {
         const ext = file.fileExtension.toLowerCase();
         let src = '';
@@ -118,76 +113,61 @@ async function readDriveRecursive(folderId, range, callback) {
           src = file.webViewLink;
         }
         if (['mp4', 'mov', 'avi', 'flv', 'wmv'].includes(ext) && !range) {
-          const urlRes = await drive.files.get({
-            fileId: file.id,
-            fields: 'webContentLink'
-          });
           result.files.push({
             src: file.webViewLink,
-            fileType: "video",
-            width: 16,
-            height: 9,
-            modifiedTime: file.modifiedTime,
+            fileType: ext,
+            name: file.name,
+            modifiedTime: new Date(file.modifiedTime),
+            thumbnailLink: src,
           });
-        } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) {
+        } else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
           result.files.push({
-            src: `${file.thumbnailLink.split('=')[0]}=s1280`,
-            fileType: "image",
-            width: file.imageMediaMetadata.width,
-            height: file.imageMediaMetadata.height,
-            modifiedTime: file.modifiedTime,
+            src,
+            fileType: ext,
+            name: file.name,
+            modifiedTime: new Date(file.modifiedTime),
+            thumbnailLink: src
           });
-        } else {
-          // Ignore other file types
-        }
-        if (!--pending) {
-          result.files.sort((a, b) => b.modifiedTime - a.modifiedTime);
-          if (range) {
-            result.files = result.files.slice(0, range);
-          }
-          callback(null, result);
         }
       }
     }
-    if (pending === files.length) {
-      callback(null, result);
+    await Promise.all(folderPromises);
+    result.files.sort((a, b) => b.modifiedTime - a.modifiedTime);
+    if (range) {
+      result.files = result.files.slice(0, range);
     }
   } else {
-    callback(null, result);
+    console.log('No files found.');
   }
+  return result;
 }
 
 app.get("/images", async (req, res) => {
-  const parentFolderId = req.query.folderId
-  const folderPath = req.query.folder;
+  const folderId = req.query.folderId;
+  const folderPath = req.query.folderPath;
   const range = parseInt(req.query.range);
-  let folderName = '';
-  if (!parentFolderId) {
-    res.status(400).send('Missing required parameter: folderId');
+  if (!folderId && !folderPath) {
+    res.status(400).send('Missing required parameter: folderId or folderPath');
     return;
   }
 
-  let folderId = parentFolderId;
-  if (folderPath) {
-    folderId = await getFolderId(parentFolderId, folderPath);
-    if (!folderId) {
-      res.status(404).send('Folder not found');
-      return;
+  try {
+    let currentFolder = {id: folderId, name: 'root'}
+    if (currentFolder.id && folderPath) {
+      currentFolder = await getFolderId(currentFolder, folderPath);
+      if (!currentFolder.id) {
+        res.status(404).send('Folder not found');
+        return;
+      }
     }
-    folderName = folderPath.split('/').pop();
-  }
 
-  readDriveRecursive(folderId, range, (err, result) => {
-    if (err) {
-      res.sendStatus(400).send("Unable to scan directory");
-      return console.log('Unable to scan directory: ' + err);
-    }
-    if (!responseSent && result.files.length || result.folders.length) {
-      result.name = folderName
-      res.json(result);
-      responseSent = true;
-    }
-  });
+    const result = await readDriveRecursive(currentFolder.id, range);
+    result.name = currentFolder.name
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Error reading drive');
+  }
 });
 
 app.listen(PORT);
