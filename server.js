@@ -90,8 +90,12 @@ async function readDriveRecursive(folderId, range, callback) {
           src = file.webViewLink;
         }
         if (['mp4', 'mov', 'avi', 'flv', 'wmv'].includes(ext)) {
+          const urlRes = await drive.files.get({
+            fileId: file.id,
+            fields: 'webContentLink'
+          });
           result.files.push({
-            src: file.webContentLink,
+            src: urlRes.data.webContentLink,
             fileType: "video",
             width: 16,
             height: 9,
