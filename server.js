@@ -21,6 +21,24 @@ const auth = new google.auth.JWT(
   ['https://www.googleapis.com/auth/drive']
 );
 
+app.get("/image", async (req, res) => {
+  const url = req.query.url;
+  if (!url) {
+    res.status(400).send('Missing required parameter: url');
+    return;
+  }
+
+  try {
+    const response = await fetch(url);
+    const contentType = response.headers.get('content-type');
+    res.set('Content-Type', contentType);
+    response.body.pipe(res);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Error fetching image');
+  }
+});
+
 
 async function exponentialBackoff(drive, options, retries = 3) {
   try {
@@ -89,7 +107,7 @@ async function readDriveRecursive(folderId, range, callback) {
         } else if (file.webViewLink) {
           src = file.webViewLink;
         }
-        if (['mp4', 'mov', 'avi', 'flv', 'wmv'].includes(ext)) {
+        if (['mp4', 'mov', 'avi', 'flv', 'wmv'].includes(ext) && !range) {
           const urlRes = await drive.files.get({
             fileId: file.id,
             fields: 'webContentLink'
