@@ -61,7 +61,7 @@ export class Navbar extends Component {
               <div><Link to="/portraits" onClick={(e) => this.hide(e)}>Portraits</Link></div></ListItem>
             <ListItem active={+(pathname === '/events')}>
               <div>
-                <Link to="/events">Events</Link>
+                <Link to="/events" onClick={e => this.hide(e)}>Events</Link>
                 <FontAwesomeIcon icon={["fas", `chevron-${isEventOpen ? "up" : "down"}`]} onClick={(e) => {
                   e.stopPropagation();
                   this.setState({

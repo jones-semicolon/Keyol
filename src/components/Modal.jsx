@@ -2,6 +2,16 @@ import { Component } from "react";
 import ReactModal from "react-modal";
 import PropTypes from 'prop-types'
 
+function RenderModal(props){
+  props.src?.replace(/(.*)view.?/, '$1preview')
+  const src = `http://keyol.vercel.app/image?url=${props.src}`;
+  console.log(props.src)
+  return props.fileType === "image" ?
+    <img src={src} alt="" /> :
+    <iframe src={src} 
+    />
+}
+
 export default class Modal extends Component {
   constructor(props) {
     super(props)
@@ -35,7 +45,7 @@ export default class Modal extends Component {
             right: "auto",
             bottom: "auto",
             maxHeight: "90vh",
-            aspectRatio: `${this.props.width} / ${this.props.height}`,
+            aspectRatio: `${this.props.file?.width} / ${this.props.file?.height}`,
             height: "auto",
             width: "auto",
           },
@@ -44,11 +54,7 @@ export default class Modal extends Component {
           }
         }}
       >
-        {
-          this.props.fileType === "video" ?
-            <video src={this.props.src} autoPlay controls playsInline controlsList="nodownload disablepictureinpicture" style={{ width: "100%", objectFit: "contain" }}></video> :
-            <img src={this.props.src} alt="" style={{ width: "100%", objectFit: "contain" }} />
-        }
+        <RenderModal {...this.props.file}/>
       </ReactModal>
     )
   }
@@ -56,10 +62,12 @@ export default class Modal extends Component {
 
 
 Modal.propTypes = {
-  src: PropTypes.string,
   close: PropTypes.func,
   state: PropTypes.bool,
+  file: PropTypes.object
+}
+
+RenderModal.propTypes = {
   fileType: PropTypes.string,
-  height: PropTypes.number,
-  width: PropTypes.number
+  src: PropTypes.string
 }

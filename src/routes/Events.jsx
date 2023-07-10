@@ -1,11 +1,26 @@
 import { Component } from 'react'
 import { Content, Title, Gallery, Folder, TextOverlay } from "../styles/styled"
-import axios from 'axios'
+import Loader from '../components/Loader'
+import PropTypes from 'prop-types'
+
+
+function RenderImage({ files, folders }){
+  const randomize = (length) => Math.floor(Math.random() * length)
+  let src = "";
+  if(files.length){
+    src = files[randomize(files.length)].thumbnailLink
+  } else {
+    src = folders[randomize(folders.length)].files[files.length].thumbnailLink
+  }
+  return <img src={src} alt="" loading="lazy"/>
+}
+
 export default class Events extends Component {
   constructor(props) {
     super(props)
     this.state = {
       folder: [],
+      isLoaded: false
     }
   }
   initialize() {
@@ -17,10 +32,12 @@ export default class Events extends Component {
           if (resp) {
             resp.json().then(data => {
               if (Date.now() - data.timestamp < 5 * 60 * 1000) {
-                axios.get(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=events`).then((res) => {
-                  const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
+                fetch(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folderPath=events&range=3`)
+                  .then(response => response.json())
+                  .then((res) => {
+                  const data = new Response(JSON.stringify({ folder: res.folders, timestamp: Date.now() }));
                   cache.put("events", data);
-                  this.setState({ folder: res.data.folders, isLoaded: true })
+                  this.setState({ folder: res.folders, isLoaded: true })
                 }).catch((err) => {
                   throw new Error(err)
                 })
@@ -28,10 +45,12 @@ export default class Events extends Component {
               else { this.setState({ folder: data.folder, isLoaded: true }); }
             });
           } else {
-            axios.get(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=events`).then((res) => {
-              const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
+            fetch(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folderPath=events&range=3`)
+              .then(response => response.json())
+              .then((res) => {
+              const data = new Response(JSON.stringify({ folder: res.folders, timestamp: Date.now() }));
               cache.put("events", data);
-              this.setState({ folder: res.data.folders, isLoaded: true })
+              this.setState({ folder: res.folders, isLoaded: true })
             }).catch((err) => {
               throw new Error(err)
             })
@@ -44,10 +63,10 @@ export default class Events extends Component {
     this.initialize()
   }
   render() {
-    const { folder } = this.state
-    console.log(folder)
+    const { folder, isLoaded } = this.state
     return (
       <Content>
+        {!isLoaded ? <Loader /> : undefined}
         <Title>
           <h2>Events</h2>
         </Title>
@@ -56,7 +75,7 @@ export default class Events extends Component {
             folder?.map(({ name, files, folders }, key) => {
               return (
                 <Folder key={name} to={`/events/${name}`} delay={key}>
-                  <img src={files.length ? files[Math.floor(Math.random() * files.length)].src : folders[Math.floor(Math.random() * folders.length)].files[Math.floor(Math.random() * files.length)].src} loading="lazy" />
+                  <RenderImage files={files} folders={folders}/>
                   <TextOverlay>{name}</TextOverlay>
                 </Folder>)
             })
@@ -65,4 +84,9 @@ export default class Events extends Component {
       </Content >
     )
   }
+}
+
+RenderImage.propTypes = {
+  files: PropTypes.object,
+  folders: PropTypes.object
 }

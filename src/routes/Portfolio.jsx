@@ -6,7 +6,6 @@ import { Content, Title } from "../styles/styled";
 import ScrollTop from '../components/ScrollTop'
 import imagesloaded from 'imagesloaded'
 import Modal from "../components/Modal";
-import axios from "axios"
 import PropTypes from 'prop-types'
 
 function portfolioRoute(PortfolioRoute) {
@@ -22,6 +21,12 @@ function rowHeightConfig(containerWidth) {
   return (containerWidth / 2.5);
 }
 
+function RenderItem(props){
+  const {imageProps, photo} = props;
+  imageProps.src = `https://keyol.vercel.app/image?url=${encodeURIComponent(photo.thumbnailLink)}`
+  return <img {...imageProps} />
+}
+
 class Portfolio extends Component {
   constructor(props) {
     super(props)
@@ -31,9 +36,7 @@ class Portfolio extends Component {
       title: "" || this.props.title,
       modal: {
         state: false,
-        src: "",
-        height: 0,
-        width: 0,
+        file: {}
       },
     }
   }
@@ -50,20 +53,24 @@ class Portfolio extends Component {
                 this.setState({ folders: data.folders, isLoaded: true });
               }
               else {
-                axios.get(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.location.pathname.substring(1)}`).then((res) => {
-                  const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
+                fetch(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folderPath=${this.props.location.pathname.substring(1)}`)
+                  .then(response => response.json())
+                  .then((res) => {
+                  const data = new Response(JSON.stringify({ folders: res, timestamp: Date.now() }));
                   cache.put(this.props.title, data);
-                  this.setState({ folders: res.data, isLoaded: true })
+                  this.setState({ folders: res, isLoaded: true })
                 }).catch((err) => {
                   throw new Error(err)
                 })
               }
             });
           } else {
-            axios.get(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.location.pathname.substring(1)}`).then((res) => {
-              const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
+            fetch(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folderPath=${this.props.location.pathname.substring(1)}`)
+              .then(response => response.json())
+              .then((res) => {
+              const data = new Response(JSON.stringify({ folders: res, timestamp: Date.now() }));
               cache.put(this.props.title, data);
-              this.setState({ folders: res.data, isLoaded: true })
+              this.setState({ folders: res, isLoaded: true })
             }).catch((err) => {
               throw new Error(err)
             })
@@ -110,11 +117,12 @@ class Portfolio extends Component {
                     this.setState({
                       modal: {
                         state: true,
-                        ...files[index]
+                        file: files[index]
                       }
                     })
                   }}
                   key={name}
+                  renderPhoto={(props) => <RenderItem {...props} />}
                 />
               )
             )
@@ -127,11 +135,11 @@ class Portfolio extends Component {
               this.setState({
                 modal: {
                   state: true,
-                  ...folders?.files[index]
+                  file: folders?.files[index]
                 }
               })
             }}
-            renderPhoto={({ photo, imageProps }) => photo.fileType === "video" ? <video {...imageProps} /> : <img {...imageProps} />}
+            renderPhoto={(props) => <RenderItem {...props} />}
           />
           <ScrollTop />
         </Content>
@@ -145,4 +153,9 @@ export default portfolioRoute(Portfolio)
 Portfolio.propTypes = {
   title: PropTypes.string,
   location: PropTypes.object
+}
+
+RenderItem.propTypes = {
+  photo: PropTypes.object,
+  imageProps: PropTypes.object
 }

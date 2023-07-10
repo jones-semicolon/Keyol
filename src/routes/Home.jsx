@@ -1,13 +1,12 @@
 import { Component } from 'react'
 import { Content, Title, Gallery, Folder, TextOverlay } from "../styles/styled"
-import axios from "axios"
 import Loader from '../components/Loader'
 export default class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
       folder: [],
-      isLoaded: false
+      isLoaded: false,
     }
   }
   initialize() {
@@ -22,23 +21,28 @@ export default class Home extends Component {
                 this.setState({ folder: data.folder, isLoaded: true });
               }
               else {
-                axios.get(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}`).then((res) => {
-                  const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
+                fetch(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&range=3`)
+                  .then(response => response.json())
+                  .then((res) => {
+                  const data = new Response(JSON.stringify({ folder: res.folders, timestamp: Date.now() }));
                   cache.put("home", data);
-                  this.setState({ folder: res.data.folders, isLoaded: true })
+                  this.setState({ folder: res.folders, isLoaded: true })
                 }).catch((err) => {
                   throw new Error(err)
                 })
               }
             });
           } else {
-            axios.get(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}`).then((res) => {
-              const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
-              cache.put("home", data);
-              this.setState({ folder: res.data.folders, isLoaded: true })
-            }).catch((err) => {
-              throw new Error(err)
-            })
+            fetch(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&range=3`)
+              .then((response) => response.json())
+              .then((res) => {
+                console.log(res)
+                const data = new Response(JSON.stringify({ folder: res.folders, timestamp: Date.now() }));
+                cache.put("home", data);
+                this.setState({ folder: res.folders, isLoaded: true })
+              }).catch((err) => {
+                throw new Error(err)
+              })
           }
         })
       });
@@ -68,7 +72,7 @@ export default class Home extends Component {
               if (!name && !files.length) return
               return (
                 <Folder key={key} to={`/${name}`} delay={key}>
-                  <img src={files.length ? files[Math.floor(Math.random() * files.length)].src : folders[Math.floor(Math.random(folders.length))]?.files[Math.floor(Math.random() * files.length)].src} loading="lazy" />
+                  <img src={files.length ? `https://keyol.vercel.app/image?url=${encodeURIComponent(files[0].thumbnailLink)}` : `https://keyol.vercel.app/image?url=${encodeURIComponent(folders[0]?.files[0].thumbnailLink)}`} loading="lazy" />
                   <TextOverlay>{name}</TextOverlay>
                 </Folder>)
             })
