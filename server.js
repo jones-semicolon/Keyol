@@ -7,9 +7,18 @@ const app = express();
 // app.use(cors());
 app.use(express.json());
 dotenv.config();
+const allowed_origins = [
+  'https://jonestly-source.github.io',
+  'http://localhost:5173'
+]
 app.use((req,res,next)=>{
     // res.setHeader('Access-Control-Allow-Origin','https://jonestly-source.github.io');
   res.setHeader('Access-Control-Allow-Origin', "*")
+  if (req.headers.origin) {
+    if (allowed_origins.indexOf(req.headers.origin) > -1) {
+      res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+    }
+  }
     next(); 
 })
 
