@@ -4,11 +4,7 @@ const { google } = require("googleapis");
 const cors = require('cors');
 const PORT = process.env.PORT || 5174;
 const app = express();
-app.use(cors({
-  origin: '*',
-  methods: ['GET'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors());
 app.use(express.json());
 dotenv.config();
 
