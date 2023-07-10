@@ -7,10 +7,10 @@ const app = express();
 // app.use(cors());
 app.use(express.json());
 dotenv.config();
-app.use((req,res,next)=>{
-    res.setHeader('Access-Control-Allow-Origin','https://jonestly-source.github.io');
-    next(); 
-})
+// app.use((req,res,next)=>{
+//     res.setHeader('Access-Control-Allow-Origin','https://jonestly-source.github.io');
+//     next(); 
+// })
 
 let responseSent = false;
 
