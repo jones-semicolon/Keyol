@@ -58,6 +58,10 @@ const App = createBrowserRouter([
       },
     ],
     errorElement: <Error />
+  },
+],
+  {
+    basename: "/Keyol",
   }
-])
+)
 export default App

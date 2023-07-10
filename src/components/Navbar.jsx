@@ -27,12 +27,12 @@ export class Navbar extends Component {
     })
   }
 
-  hide(e) {
+  hide() {
     this.setState({ isBurgerOpen: false })
   }
 
   render() {
-    const { isScrolled, haveBurger, isBurgerOpen, isEventOpen } = this.state
+    const { isScrolled, isBurgerOpen, isEventOpen } = this.state
     const { pathname } = this.props.location;
     return (
       <>

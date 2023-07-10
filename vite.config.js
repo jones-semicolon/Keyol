@@ -8,6 +8,6 @@ export default defineConfig({
       '/images': "http://keyol.vercel.app",
     }
   },
-  base: "/",
+  base: "/Keyol",
   plugins: [react()],
 })
