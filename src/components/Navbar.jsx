@@ -70,10 +70,10 @@ export class Navbar extends Component {
                 }} />
               </div>
               <SubList isopen={isEventOpen ? "flex" : "none"} >
-                <ListItem active={+(pathname === "/event/rakrakan-festival")}><div><Link to="/events/rakrakan-festival" onClick={(e) => this.hide(e)}>Rakrakan Festival</Link></div></ListItem>
-                <ListItem active={+(pathname === "/event/wowowin")}><div><Link to="/events/wowowin" onClick={(e) => this.hide(e)}>Wowowin</Link></div></ListItem>
-                <ListItem active={+(pathname === "/event/showtime")}><div><Link to="/events/showtime" onClick={(e) => this.hide(e)}>Showtime</Link></div></ListItem>
-                <ListItem active={+(pathname === "/event/jakul")}><div><Link to="/events/jakul" onClick={(e) => this.hide(e)}>Jakul</Link></div></ListItem>
+                <ListItem active={+(pathname === "/events/rakrakan-festival")}><div><Link to="/events/rakrakan-festival" onClick={(e) => this.hide(e)}>Rakrakan Festival</Link></div></ListItem>
+                <ListItem active={+(pathname === "/events/wowowin")}><div><Link to="/events/wowowin" onClick={(e) => this.hide(e)}>Wowowin</Link></div></ListItem>
+                <ListItem active={+(pathname === "/events/showtime")}><div><Link to="/events/showtime" onClick={(e) => this.hide(e)}>Showtime</Link></div></ListItem>
+                <ListItem active={+(pathname === "/events/jakul")}><div><Link to="/events/jakul" onClick={(e) => this.hide(e)}>Jakul</Link></div></ListItem>
               </SubList>
             </ListItem>
             <ListItem active={+(pathname === "/still-life")}>
