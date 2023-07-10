@@ -49,18 +49,18 @@ class Portfolio extends Component {
               if (Date.now() - data.timestamp < 5 * 60 * 1000) {
                 this.setState({ folders: data.folders, isLoaded: true });
               }
-              else {  
-                axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.location.pathname.substring(1)}`).then((res) => {
+              else {
+                axios.get(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.location.pathname.substring(1)}`).then((res) => {
                   const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
                   cache.put(this.props.title, data);
                   this.setState({ folders: res.data, isLoaded: true })
                 }).catch((err) => {
-                    throw new Error(err)
-                  })
+                  throw new Error(err)
+                })
               }
             });
           } else {
-            axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.location.pathname.substring(1)}`).then((res) => {
+            axios.get(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.location.pathname.substring(1)}`).then((res) => {
               const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
               cache.put(this.props.title, data);
               this.setState({ folders: res.data, isLoaded: true })

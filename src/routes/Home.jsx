@@ -22,7 +22,7 @@ export default class Home extends Component {
                 this.setState({ folder: data.folder, isLoaded: true });
               }
               else {
-                axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}`).then((res) => {
+                axios.get(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}`).then((res) => {
                   const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
                   cache.put("home", data);
                   this.setState({ folder: res.data.folders, isLoaded: true })
@@ -32,7 +32,7 @@ export default class Home extends Component {
               }
             });
           } else {
-            axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}`).then((res) => {
+            axios.get(`https://keyol.vercel.app/images?folderId=${import.meta.env.VITE_FOLDER_ID}`).then((res) => {
               const data = new Response(JSON.stringify({ folder: res.data.folders, timestamp: Date.now() }));
               cache.put("home", data);
               this.setState({ folder: res.data.folders, isLoaded: true })
