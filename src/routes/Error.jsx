@@ -1,5 +1,4 @@
 import Lottie from "lottie-react"
-import { Component } from 'react'
 import camera from "../assets/camera.json"
 import { ErrorPage } from "../styles/styled"
 import { useRouteError } from "react-router-dom"

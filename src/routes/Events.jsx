@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { Content, Title, Gallery, Folder, TextOverlay } from "../styles/styled"
-import { importImages } from '../components/Files'
 import axios from 'axios'
 export default class Events extends Component {
   constructor(props) {
