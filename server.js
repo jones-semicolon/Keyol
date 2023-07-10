@@ -161,7 +161,7 @@ async function readDriveRecursive(folderId, range, callback) {
 app.get("/images", async (req, res) => {
   const parentFolderId = req.query.folderId
   const folderPath = req.query.folder;
-  const range = req.query.range;
+  const range = parseInt(req.query.range);
   let folderName = '';
   if (!parentFolderId) {
     res.status(400).send('Missing required parameter: folderId');
