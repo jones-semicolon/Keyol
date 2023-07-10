@@ -91,7 +91,7 @@ async function readDriveRecursive(folderId, range, callback) {
         }
         if (['mp4', 'mov', 'avi', 'flv', 'wmv'].includes(ext)) {
           result.files.push({
-            src: file.webContentLink,
+            src: file.webViewLink,
             fileType: "video",
             width: 16,
             height: 9,
