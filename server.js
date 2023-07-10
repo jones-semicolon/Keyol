@@ -13,7 +13,6 @@ const allowed_origins = [
 ]
 app.use((req,res,next)=>{
     // res.setHeader('Access-Control-Allow-Origin','https://jonestly-source.github.io');
-  res.setHeader('Access-Control-Allow-Origin', "*")
   if (req.headers.origin) {
     if (allowed_origins.indexOf(req.headers.origin) > -1) {
       res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
