@@ -1,11 +1,11 @@
 import { createBrowserRouter } from "react-router-dom"
 import Navbar from "./components/Navbar"
-import Error from './routes/Error'
 import { lazy } from "react"
 
 const Portfolio = lazy(() => import("./routes/Portfolio"))
 const Home = lazy(() => import("./routes/Home"))
 const Events = lazy(() => import("./routes/Events"))
+const Error = lazy(() => import("./routes/Error"))
 
 const App = createBrowserRouter([
   {

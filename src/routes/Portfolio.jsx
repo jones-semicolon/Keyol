@@ -47,7 +47,6 @@ class Portfolio extends Component {
           if (resp) {
             resp.json().then(data => {
               if (Date.now() - data.timestamp < 5 * 60 * 1000) {
-                console.log(Date.now() - data.timestamp < 5 * 60 * 1000)
                 this.setState({ folders: data.folders, isLoaded: true });
               }
               else {  
