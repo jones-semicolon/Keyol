@@ -47,18 +47,21 @@ class Portfolio extends Component {
           if (resp) {
             resp.json().then(data => {
               if (Date.now() - data.timestamp < 5 * 60 * 1000) {
-                axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.title}`).then((res) => {
+                console.log(Date.now() - data.timestamp < 5 * 60 * 1000)
+                this.setState({ folders: data.folders, isLoaded: true });
+              }
+              else {  
+                axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.location.pathname.substring(1)}`).then((res) => {
                   const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
                   cache.put(this.props.title, data);
                   this.setState({ folders: res.data, isLoaded: true })
                 }).catch((err) => {
-                  throw new Error(err)
-                })
+                    throw new Error(err)
+                  })
               }
-              else { this.setState({ folders: data.folders, isLoaded: true }); }
             });
           } else {
-            axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.title}`).then((res) => {
+            axios.get(`/images?folderId=${import.meta.env.VITE_FOLDER_ID}&folder=${this.props.location.pathname.substring(1)}`).then((res) => {
               const data = new Response(JSON.stringify({ folders: res.data, timestamp: Date.now() }));
               cache.put(this.props.title, data);
               this.setState({ folders: res.data, isLoaded: true })
@@ -89,7 +92,6 @@ class Portfolio extends Component {
 
   render() {
     const { isLoaded, title, modal, folders } = this.state;
-    console.log(folders)
     return (
       <>
         <Modal {...modal} close={() => this.setState({ modal: { state: false, src: "" } })} />
@@ -100,7 +102,7 @@ class Portfolio extends Component {
           </Title>
           {
             folders?.folders?.map(
-              ({ files, name, folders }) => (
+              ({ files, name }) => (
                 <PhotoAlbum
                   layout="rows"
                   photos={files}
@@ -142,5 +144,6 @@ class Portfolio extends Component {
 export default portfolioRoute(Portfolio)
 
 Portfolio.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
+  location: PropTypes.object
 }
