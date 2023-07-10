@@ -40,7 +40,7 @@ class Portfolio extends Component {
 
   initialize() {
     window.scrollTo(0, 0);
-    this.setState({ isLoaded: false })
+    this.setState({ isLoaded: false, folders: {}, title: this.props.title})
     if ('caches' in window) {
       caches.open('images').then((cache) => {
         cache.match(this.props.title).then(resp => {
