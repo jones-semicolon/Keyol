@@ -126,8 +126,10 @@ const ListItem = styled.li`
       color: var(--active);
     }
   `};
-  & > div:hover, & > div:active {
-    color: var(--active);
+  @media(hover: hover) and (pointer: fine) {
+    & > div:hover, & > div:active {
+      color: var(--active);
+    }
   }
   & > * {
     display: flex;
