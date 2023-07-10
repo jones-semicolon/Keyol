@@ -95,7 +95,7 @@ async function readDriveRecursive(folderId, range, callback) {
             fields: 'webContentLink'
           });
           result.files.push({
-            src: urlRes.data.webContentLink,
+            src: file.webViewLink,
             fileType: "video",
             width: 16,
             height: 9,
