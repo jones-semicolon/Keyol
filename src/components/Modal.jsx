@@ -3,12 +3,13 @@ import ReactModal from "react-modal";
 import PropTypes from 'prop-types'
 
 function RenderModal(props){
-  props.src?.replace(/(.*)view.?/, '$1preview')
-  const src = `http://keyol.vercel.app/image?url=${props.src}`;
-  console.log(props.src)
+  // const src = `https://keyol.vercel.app/image?url=${props.src?.replace(/(.*)view.*$/, '$1preview')}`;
+  const src = props.src?.replace(/(.*)view.*$/, '$1preview?autoplay=1')
   return props.fileType === "image" ?
     <img src={src} alt="" /> :
     <iframe src={src} 
+      frameBorder="0"
+      allowFullScreen
     />
 }
 
