@@ -2,15 +2,17 @@ import { Component } from "react";
 import ReactModal from "react-modal";
 import PropTypes from 'prop-types'
 
-function RenderModal(props){
-  // const src = `https://keyol.vercel.app/image?url=${props.src?.replace(/(.*)view.*$/, '$1preview')}`;
-  const src = props.src?.replace(/(.*)view.*$/, '$1preview?autoplay=1')
-  return props.fileType === "image" ?
-    <img src={src} alt="" /> :
-    <iframe src={src} 
+function RenderModal(props) {
+  let src;
+  if (props.fileType === "video") {
+    src = props.src?.replace(/(.*)view.*$/, '$1preview?autoplay=1')
+    return <iframe src={src}
       frameBorder="0"
       allowFullScreen
     />
+  }
+  src = `https://keyol.vercel.app/image?url=${props.src}`
+  return <img src={src} alt="" />
 }
 
 export default class Modal extends Component {
@@ -55,7 +57,7 @@ export default class Modal extends Component {
           }
         }}
       >
-        <RenderModal {...this.props.file}/>
+        <RenderModal {...this.props.file} />
       </ReactModal>
     )
   }
