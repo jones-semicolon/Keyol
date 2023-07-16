@@ -1,35 +1,31 @@
 import { Component } from "react";
 import ReactModal from "react-modal";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
 function RenderModal(props) {
   let src;
   if (props.fileType === "video") {
-    src = props.src?.replace(/(.*)view.*$/, '$1preview?autoplay=1')
-    return <iframe src={src}
-      frameBorder="0"
-      allowFullScreen
-    />
+    src = props.src?.replace(/(.*)view.*$/, "$1preview?");
+    return <iframe src={src} frameBorder="0" allowFullScreen />;
   }
-  src = `https://keyol.vercel.app/image?url=${props.src}`
-  return <img src={src} alt="" />
+  src = `https://keyol.vercel.app/image?url=${props.src}`;
+  return <img src={src} alt="" />;
 }
 
 export default class Modal extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
   componentDidUpdate() {
     if (this.props.state && document.body.style.overflow !== "hidden") {
-      document.body.style.overflow = 'hidden';
-    }
-    else if (!this.props.state && document.body.style.overflow !== "unset") {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "hidden";
+    } else if (!this.props.state && document.body.style.overflow !== "unset") {
+      document.body.style.overflow = "unset";
     }
   }
 
   componentWillUnmount() {
-    document.body.style.overflow = 'unset';
+    document.body.style.overflow = "unset";
   }
 
   render() {
@@ -54,23 +50,22 @@ export default class Modal extends Component {
           },
           overlay: {
             backgroundColor: "var(--overlay-color)",
-          }
+          },
         }}
       >
         <RenderModal {...this.props.file} />
       </ReactModal>
-    )
+    );
   }
 }
-
 
 Modal.propTypes = {
   close: PropTypes.func,
   state: PropTypes.bool,
-  file: PropTypes.object
-}
+  file: PropTypes.object,
+};
 
 RenderModal.propTypes = {
   fileType: PropTypes.string,
-  src: PropTypes.string
-}
+  src: PropTypes.string,
+};

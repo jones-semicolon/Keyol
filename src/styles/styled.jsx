@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import { styled, keyframes } from "styled-components";
 
 const popupAnim = keyframes`
@@ -10,7 +10,7 @@ const popupAnim = keyframes`
     opacity: 1;
     top: 0;
   }
-`
+`;
 const Content = styled.div`
   display: grid;
   padding: 1rem;
@@ -21,17 +21,17 @@ const Content = styled.div`
   outline-color: blue;
   @media (width < 300px) {
     grid-gap: 5px;
-  };
+  }
   @media (width >= 300px) {
     grid-gap: 10px;
-  };
+  }
   @media (600px <= width <= 1200px) {
     grid-gap: 15px;
-  };
+  }
   @media (width >= 1200px) {
     grid-gap: 20px;
-  };
-`
+  }
+`;
 const Title = styled.div`
   display: flex;
   justify-content: center;
@@ -43,9 +43,9 @@ const Title = styled.div`
   & > * {
     max-width: 500px;
   }
-`
+`;
 const ScrollButton = styled.div`
-  display: ${props => props.scrolled};
+  display: ${(props) => props.scrolled};
   position: fixed;
   inset: auto 10% 10% auto;
   aspect-ratio: 1;
@@ -56,7 +56,7 @@ const ScrollButton = styled.div`
   align-items: center;
   cursor: pointer;
   z-index: 5;
-`
+`;
 const Nav = styled.div`
   display: flex;
   flex-direction: column;
@@ -65,40 +65,43 @@ const Nav = styled.div`
   z-index: 50;
   position: sticky;
   top: 0;
-  background-color: ${props => !props.scrolled && `var(--navBg)`};
-  @media (width > 460px){
+  background-color: ${(props) => !props.scrolled && `var(--navBg)`};
+  @media (width > 460px) {
     background-color: var(--navBg);
     width: max(400px, min(20%, 200px));
     height: 100vh;
     height: 100svh;
   }
-`
+`;
 const Burger = styled.button`
   font-size: 1.5rem;
   @media (width > 460px) {
     display: none;
   }
-`
+`;
 
 const Topbar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: .5rem 1.5rem;
-  font-family: Comforter, Helvetica;
+  padding: 0.5rem 1.5rem;
+  font-family: Helvetica;
   & > a {
     padding: 5px 10px;
   }
-`
+  & > a > h1 {
+    font-size: 1.5rem;
+  }
+`;
 
 const List = styled.ul`
-  display: ${props => props.isopen};
+  display: ${(props) => props.isopen};
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding: .5rem 1.5rem 1.5rem 1.5rem;
-  gap: .5rem;
+  padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+  gap: 0.5rem;
   position: absolute;
   width: 100%;
   background-color: inherit;
@@ -109,10 +112,10 @@ const List = styled.ul`
     top: unset;
     flex-grow: 1;
     & > li:last-of-type {
-        margin-top: auto;
-      }
+      margin-top: auto;
+    }
   }
-`
+`;
 
 const ListItem = styled.li`
   display: flex;
@@ -121,13 +124,16 @@ const ListItem = styled.li`
   align-items: flex-start;
   width: 100%;
   position: relative;
-  ${({ active }) => active && `
+  ${({ active }) =>
+    active &&
+    `
     & > div {
       color: var(--active);
     }
   `};
-  @media(hover: hover) and (pointer: fine) {
-    & > div:hover, & > div:active {
+  @media (hover: hover) and (pointer: fine) {
+    & > div:hover,
+    & > div:active {
       color: var(--active);
     }
   }
@@ -138,25 +144,25 @@ const ListItem = styled.li`
     justify-content: space-between;
     align-items: center;
     user-select: none;
-    padding: .25rem .5rem;
-  };
+    padding: 0.25rem 0.5rem;
+  }
   & a {
     flex-grow: 1;
   }
-`
+`;
 
 const SubList = styled(List)`
   position: unset;
-  padding-bottom: .5rem;
-  display: ${props => props.isopen};
-`
+  padding-bottom: 0.5rem;
+  display: ${(props) => props.isopen};
+`;
 
 const ContactList = styled(ListItem)`
   flex-direction: row;
   justify-content: center;
   gap: 1rem;
-  padding: .5rem 1rem;
-`
+  padding: 0.5rem 1rem;
+`;
 const Gallery = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -164,10 +170,10 @@ const Gallery = styled.div`
   width: 100%;
   outline-color: plum;
   /* flex-grow: 1; */
-  @media (min-width: 1024px){
-    grid-template-columns: repeat(3, minmax(150px, 1fr))
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
   }
-`
+`;
 const Folder = styled(Link)`
   width: 100%;
   min-height: 320px;
@@ -177,24 +183,24 @@ const Folder = styled(Link)`
   place-items: center;
   overflow: hidden;
   cursor: pointer;
-  animation: ${popupAnim} ${props => props.delay * .5}s ease;
+  animation: ${popupAnim} ${(props) => props.delay * 0.5}s ease;
   &:after {
     content: "";
     background-color: var(--overlay-color);
     position: absolute;
     inset: 0;
   }
-  @media (width > 768px){
+  @media (width > 768px) {
     min-height: 150px;
   }
-`
+`;
 const TextOverlay = styled.div`
   position: absolute;
   z-index: 3;
   text-transform: Capitalize;
   font-size: clamp(1.2rem, 2vw, 2rem);
-  color: hsl(0 0% 80%)
-`
+  color: hsl(0 0% 80%);
+`;
 const ErrorPage = styled.div`
   height: 100%;
   width: 100%;
@@ -202,7 +208,7 @@ const ErrorPage = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-`
+`;
 
 export {
   Content,
@@ -219,4 +225,4 @@ export {
   Folder,
   TextOverlay,
   ErrorPage,
-}
+};

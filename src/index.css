@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Comforter&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Comforter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap");
 :root {
-  font-family: 'Roboto Slab' ,Helvetica, Inter, system-ui, Avenir, Arial, sans-serif;
+  font-family: "Roboto Slab", Helvetica, Inter, system-ui, Avenir, Arial,
+    sans-serif;
   line-height: 2;
   font-weight: 400;
 
@@ -16,12 +17,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  --overlay-color: hsl(0 0% 0% / .6);
+  --overlay-color: hsl(0 0% 0% / 0.6);
   --background: hsl(0 0% 14%);
   --navBg-light: hsl(0 0% 90%);
   --navBg-dark: hsl(0 0% 12%);
   --navBg: hsl(0 0% 12%);
-  --active: hsl(0 0% 60%)
+  --active: hsl(0 0% 60%);
 }
 /*@NOTE: RESET*/
 * {
@@ -32,14 +33,15 @@
   /* outline: 1px solid; */
 }
 
-a, button {
+a,
+button {
   all: initial;
   color: inherit;
   font-family: inherit;
   height: 100%;
   cursor: pointer;
   user-select: none;
-  transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1)
+  transition: all 250ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 button {
@@ -48,7 +50,8 @@ button {
   padding: 10px;
 }
 
-:root, body {
+:root,
+body {
   min-height: 100vh;
   min-height: 100dvh;
   outline-color: blue;
@@ -65,25 +68,36 @@ li {
   list-style-type: none;
 }
 
-img, iframe {
+iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   background-color: hsl(0 0% 50%);
-  background-image: linear-gradient(to right,hsl(0 0% 50%), hsl(0 0% 70%), hsl(0 0% 50%));
+  background-image: linear-gradient(
+    to right,
+    hsl(0 0% 50%),
+    hsl(0 0% 70%),
+    hsl(0 0% 50%)
+  );
   background-size: 300% 100%;
   animation: bgLoading 2s infinite;
   user-select: none;
   transition: filter 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
-@media(hover: hover) and (pointer: fine) {
+@media (hover: hover) and (pointer: fine) {
   .react-photo-album img:hover {
     filter: brightness(0.5);
   }
 }
 
-.ReactModal__Content{
+.ReactModal__Content {
   opacity: 0;
   transition: opacity 150ms cubic-bezier(0.47, 0, 0.745, 0.715);
   /* inset: unset !important; */
@@ -95,35 +109,35 @@ img, iframe {
   border-color: var(--background) !important;
 }
 
-.ReactModal__Content--after-open{  
+.ReactModal__Content--after-open {
   opacity: 1;
 }
 
-.ReactModal__Content--before-close{
+.ReactModal__Content--before-close {
   opacity: 0;
 }
-.ReactModal__Overlay{
+.ReactModal__Overlay {
   opacity: 0;
   transition: opacity 250ms cubic-bezier(0.77, 0, 0.175, 1);
   z-index: 99;
-  background-color: var(--overlay-color),
+  background-color: var(--overlay-color);
 }
 
-.ReactModal__Overlay--after-open{  
+.ReactModal__Overlay--after-open {
   opacity: 1;
 }
 
-.ReactModal__Overlay--before-close{
+.ReactModal__Overlay--before-close {
   opacity: 0;
 }
 
 @keyframes bgLoading {
   from {
-  background-position: 0% 0%;
-}
+    background-position: 0% 0%;
+  }
   to {
-  background-position: 300% 0%;
-}
+    background-position: 300% 0%;
+  }
 }
 
 @media (width > 460px) {
@@ -135,11 +149,8 @@ img, iframe {
   }
 }
 
-@media (width > 768px){
+@media (width > 768px) {
 }
-
-
-
 
 @media (prefers-color-scheme: light) {
   :root {

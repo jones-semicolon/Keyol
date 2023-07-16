@@ -1,6 +1,5 @@
 import { keyframes, styled } from "styled-components";
 import { Component } from "react";
-import PropTypes from "prop-types"
 
 const Container = styled.div`
   position: ${props => props.pos};
@@ -32,26 +31,26 @@ const loadAnim = keyframes`
 `
 const Ring = styled.div`
   width : ${props => props.size}px;
+  height: ${props => props.size}px;
+  display: inline-block;
+  position: relative;
+  @media (max-width: 460px){
+    margin-top: -100px;
+  }
+  &::after , &::before {
+    content: '';
+    width : ${props => props.size}px;
     height: ${props => props.size}px;
-    display: inline-block;
-    position: relative;
-    @media (max-width: 460px){
-      margin-top: -100px;
-    }
-    &::after , &::before {
-      content: '';
-      width : ${props => props.size}px;
-      height: ${props => props.size}px;
-      border-radius: 50%;
-      border:2px solid;
-      position: absolute;
-      left:0;
-      top: 0;
-      animation: ${loadAnim} 2s linear infinite;
-    }
-    &::after {
-      animation-delay: 1s;
-    }
+    border-radius: 50%;
+    border:2px solid;
+    position: absolute;
+    left:0;
+    top: 0;
+    animation: ${loadAnim} 2s linear infinite;
+  }
+  &::after {
+    animation-delay: 1s;
+  }
 `
 
 export default class Loader extends Component {
@@ -76,6 +75,3 @@ export default class Loader extends Component {
   }
 }
 
-Loader.propTypes = {
-  pos: PropTypes.string,
-}
