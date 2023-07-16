@@ -8,7 +8,7 @@ function RenderModal(props) {
     src = props.src?.replace(/(.*)view.*$/, "$1preview?");
     return <iframe src={src} frameBorder="0" allowFullScreen />;
   }
-  src = `https://keyol.vercel.app/image?url=${props.src}`;
+  src = `${import.meta.env.VITE_BASE_API}/image?url=${props.src}`;
   return <img src={src} alt="" />;
 }
 
