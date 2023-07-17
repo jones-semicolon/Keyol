@@ -7,9 +7,7 @@ function RenderModal(props) {
   let src;
   if (props.fileType === "video") {
     src = props.src?.replace(/(.*)view.*$/, "$1preview");
-    return (
-      <iframe src={src} frameBorder="0" allowFullScreen />
-    );
+    return <iframe src={src} frameBorder="0" allowFullScreen width={1080} />;
   }
   src = `${import.meta.env.VITE_BASE_API}/image?url=${props.src}`;
   return <img src={src} alt="" />;
