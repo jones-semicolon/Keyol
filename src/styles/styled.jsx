@@ -86,7 +86,7 @@ const Topbar = styled.div`
   align-items: center;
   width: 100%;
   padding: 0.5rem 1.5rem;
-  font-family: Helvetica;
+  font-family: "Roboto Slab", Helvetica;
   & > a {
     padding: 5px 10px;
   }
